@@ -1,4 +1,4 @@
-# just got skills
+# Just Got Skills
 
 A growing, shareable collection of [Claude Code](https://claude.com/claude-code) **agent skills** authored by Kampanat — QA-lead tooling for test automation, bug reporting, and whatever else proves useful along the way.
 
@@ -47,10 +47,23 @@ Restart Claude Code (or start a new session) so the skills are picked up.
 
 ## Dependencies
 
-These skills reference a couple of external pieces. Install them too, or the skill will fall back / ask:
+### `spec-hawk` needs its agent
 
-- **`spec-hawk`** spawns the `automation-qa-reviewer` subagent. If that agent isn't installed, spec-hawk falls back to applying the checklist inline.
-- **`create-bug-ticket`** invokes the `debug-mantra` skill when triaging automation failures. Without it, that step is skipped — the rest of the workflow still runs.
+`spec-hawk` is a thin trigger — the actual review engine is the `automation-qa-reviewer` **subagent**, bundled here at [`agents/automation-qa-reviewer.md`](agents/automation-qa-reviewer.md). The `skills` CLI installs skills, **not** agents, so copy the agent manually after installing the skill:
+
+```bash
+# global (all projects)
+cp agents/automation-qa-reviewer.md ~/.claude/agents/
+
+# or per-project
+cp agents/automation-qa-reviewer.md /path/to/project/.claude/agents/
+```
+
+Both the skill and the agent are **repo-agnostic**: they discover your repo's own folder layout, tag scheme, shared package, and config conventions at review time rather than assuming a fixed structure. If the agent isn't installed, `spec-hawk` runs the same checklist inline as a fallback — the agent just gives cleaner, isolated results.
+
+### `create-bug-ticket`
+
+Self-contained (`SKILL.md` + `REFERENCE.md`). It invokes the public [`debug-mantra`](https://github.com/thananon/9arm-skills) skill when triaging automation failures; without it, that one step is skipped and the rest of the workflow still runs.
 
 ## Conventions
 

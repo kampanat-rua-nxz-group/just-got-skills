@@ -10,32 +10,51 @@ More skills get added over time; the two below are the starting set.
 |-------|---------|--------------|
 | [`spec-hawk`](skills/spec-hawk/SKILL.md) | `/spec-hawk` | Severity-tagged QA review of Playwright + TypeScript automation specs (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`/`NIT`) with `file:line` citations and fix snippets. |
 | [`create-bug-ticket`](skills/create-bug-ticket/SKILL.md) | "file a bug", "write a defect" | Turns any QA input (screenshot, API response, DevTools output, automation failure) into a developer-ready Jira bug ticket. |
+| [`gcm`](skills/gcm/SKILL.md) | `/gcm`, "commit message" | Generates Conventional Commit messages from the working-tree diff, detects mixed concerns and emits a numbered split-commit plan, and warns on likely secrets/PII. Copy-paste text only — never runs git. |
 
 ## Install
 
-### Recommended — `skills` CLI
+> **This is a private repo.** The bare `owner/repo` shorthand resolves over
+> unauthenticated HTTPS and will 404 for teammates. Use an SSH git URL, or set
+> `GITHUB_TOKEN`, so the `skills` CLI can authenticate.
 
-The [`skills`](https://www.npmjs.com/package/skills) CLI installs straight from this repo:
+### Recommended — `skills` CLI (private repo)
+
+The [`skills`](https://www.npmjs.com/package/skills) CLI accepts a full git URL.
+For a private repo, use the SSH form (works for anyone with GitHub SSH keys set up):
 
 ```bash
-npx skills add <you>/just-got-skills           # interactive: pick scope + skills
-npx skills add <you>/just-got-skills -l        # list available skills, install nothing
-npx skills add <you>/just-got-skills --all     # all skills, all agents, no prompts
-npx skills add <you>/just-got-skills --skill spec-hawk -a claude-code -g  # one skill, global
+SKILLS_REPO=git@github.com:kampanat-rua-nxz-group/just-got-skills.git
+npx skills add "$SKILLS_REPO"            # interactive: pick scope + skills
+npx skills add "$SKILLS_REPO" -l         # list available skills, install nothing
+npx skills add "$SKILLS_REPO" --all      # all skills, all agents, no prompts
+npx skills add "$SKILLS_REPO" --skill spec-hawk -a claude-code -g  # one skill, global
+```
+
+Or authenticate over HTTPS with a token (uses `GITHUB_TOKEN` or your `gh` CLI auth):
+
+```bash
+GITHUB_TOKEN=ghp_xxx npx skills add kampanat-rua-nxz-group/just-got-skills
 ```
 
 `-g` installs globally (user-level); omit it to install into the current project.
-Update later with `npx skills update`.
 
-### Manual — clone + symlink
+> **Heads-up:** `npx skills check` / `npx skills update` currently skip skills
+> installed from private repos (empty `skillFolderHash`,
+> [vercel-labs/skills#162](https://github.com/vercel-labs/skills/issues/162)), so
+> auto-updates won't work yet. To stay current, use the clone + symlink route below
+> and `git pull`.
+
+### Manual — clone + symlink (best for staying updated)
 
 ```bash
-git clone <this-repo-url> ~/just-got-skills
+git clone git@github.com:kampanat-rua-nxz-group/just-got-skills.git ~/just-got-skills
 ln -s ~/just-got-skills/skills/spec-hawk          ~/.claude/skills/spec-hawk
 ln -s ~/just-got-skills/skills/create-bug-ticket  ~/.claude/skills/create-bug-ticket
+ln -s ~/just-got-skills/skills/gcm                ~/.claude/skills/gcm
 ```
 
-`git pull` in `~/just-got-skills` then updates both skills in place.
+`git pull` in `~/just-got-skills` then updates all three skills in place.
 
 ### Manual — copy into a project
 

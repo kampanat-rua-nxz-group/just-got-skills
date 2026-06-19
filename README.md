@@ -11,6 +11,7 @@ More skills get added over time; the two below are the starting set.
 | [`spec-hawk`](skills/spec-hawk/SKILL.md) | `/spec-hawk` | Severity-tagged QA review of Playwright + TypeScript automation specs (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`/`NIT`) with `file:line` citations and fix snippets. |
 | [`create-bug-ticket`](skills/create-bug-ticket/SKILL.md) | "file a bug", "write a defect" | Turns any QA input (screenshot, API response, DevTools output, automation failure) into a developer-ready Jira bug ticket. |
 | [`gcm`](skills/gcm/SKILL.md) | `/gcm`, "commit message" | Generates Conventional Commit messages from the working-tree diff, detects mixed concerns and emits a numbered split-commit plan, and warns on likely secrets/PII. Copy-paste text only — never runs git. |
+| [`usecase-map`](skills/usecase-map/SKILL.md) | `/usecase-map`, "use case map", "QA use cases" | Generates a QA use-case mind map from a feature description, user story, or API spec. Produces four branches (Validation, Business Scenarios, Security & Edge, Coverage Gaps), saves a Markdown outline to the Obsidian vault, and renders an `.xmind` file via `scripts/md2xmind.py`. |
 
 ## Install
 
@@ -52,9 +53,10 @@ git clone git@github.com:kampanat-rua-nxz-group/just-got-skills.git ~/just-got-s
 ln -s ~/just-got-skills/skills/spec-hawk          ~/.claude/skills/spec-hawk
 ln -s ~/just-got-skills/skills/create-bug-ticket  ~/.claude/skills/create-bug-ticket
 ln -s ~/just-got-skills/skills/gcm                ~/.claude/skills/gcm
+ln -s ~/just-got-skills/skills/usecase-map        ~/.claude/skills/usecase-map
 ```
 
-`git pull` in `~/just-got-skills` then updates all three skills in place.
+`git pull` in `~/just-got-skills` then updates all four skills in place.
 
 ### Manual — copy into a project
 
@@ -83,6 +85,10 @@ Both the skill and the agent are **repo-agnostic**: they discover your repo's ow
 ### `create-bug-ticket`
 
 Self-contained (`SKILL.md` + `REFERENCE.md`). It invokes the public [`debug-mantra`](https://github.com/thananon/9arm-skills) skill when triaging automation failures; without it, that one step is skipped and the rest of the workflow still runs.
+
+### `usecase-map` needs Python + XMind
+
+The Markdown outline is written by Claude; `scripts/md2xmind.py` (bundled in the skill) renders it to XMind 2020+ format. Requires **Python 3** (no extra packages). The rendered `.xmind` file opens in XMind 26.x. The skill also saves the outline to your Obsidian vault — adjust the vault path in `SKILL.md` if needed.
 
 ## Conventions
 

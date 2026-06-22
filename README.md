@@ -1,95 +1,59 @@
 # Just Got Skills
 
-A growing, shareable collection of [Claude Code](https://claude.com/claude-code) **agent skills** authored by Kampanat — QA-lead tooling for test automation, bug reporting, and whatever else proves useful along the way.
+Agent skills loaded by [Claude Code](https://claude.com/claude-code) — QA-lead tooling by Got.Kampanat for everyday QA life.
 
-More skills get added over time; the two below are the starting set.
+## Layout
 
-## Skills
+Skills live under `skills/`, grouped by use:
 
-| Skill | Trigger | What it does |
-|-------|---------|--------------|
-| [`spec-hawk`](skills/spec-hawk/SKILL.md) | `/spec-hawk` | Severity-tagged QA review of Playwright + TypeScript automation specs (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`/`NIT`) with `file:line` citations and fix snippets. |
-| [`create-bug-ticket`](skills/create-bug-ticket/SKILL.md) | "file a bug", "write a defect" | Turns any QA input (screenshot, API response, DevTools output, automation failure) into a developer-ready Jira bug ticket. |
-| [`gcm`](skills/gcm/SKILL.md) | `/gcm`, "commit message" | Generates Conventional Commit messages from the working-tree diff, detects mixed concerns and emits a numbered split-commit plan, and warns on likely secrets/PII. Copy-paste text only — never runs git. |
-| [`usecase-map`](skills/usecase-map/SKILL.md) | `/usecase-map`, "use case map", "QA use cases" | Generates a QA use-case mind map from a feature description, user story, or API spec. Produces four branches (Validation, Business Scenarios, Security & Edge, Coverage Gaps), saves a Markdown outline to the Obsidian vault, and renders an `.xmind` file via `scripts/md2xmind.py`. |
+- `testing/` — QA craft: spec review, test design, defect reporting
+- `dev/` — everyday dev workflow
+
+Each skill is its own directory containing a `SKILL.md` (YAML frontmatter — `name` and `description`) plus any bundled scripts or reference files.
 
 ## Install
 
-> **This is a private repo.** The bare `owner/repo` shorthand resolves over
-> unauthenticated HTTPS and will 404 for teammates. Use an SSH git URL, or set
-> `GITHUB_TOKEN`, so the `skills` CLI can authenticate.
+> **Private repo.** The bare `owner/repo` shorthand resolves over unauthenticated HTTPS and 404s for teammates. Use the SSH git URL, or set `GITHUB_TOKEN`, so the `skills` CLI can authenticate.
 
-### Recommended — `skills` CLI (private repo)
-
-The [`skills`](https://www.npmjs.com/package/skills) CLI accepts a full git URL.
-For a private repo, use the SSH form (works for anyone with GitHub SSH keys set up):
+### With `npx skills` (recommended)
 
 ```bash
 SKILLS_REPO=git@github.com:kampanat-rua-nxz-group/just-got-skills.git
-npx skills add "$SKILLS_REPO"            # interactive: pick scope + skills
-npx skills add "$SKILLS_REPO" -l         # list available skills, install nothing
-npx skills add "$SKILLS_REPO" --all      # all skills, all agents, no prompts
-npx skills add "$SKILLS_REPO" --skill spec-hawk -a claude-code -g  # one skill, global
+npx skills add "$SKILLS_REPO"          # interactive: pick scope + skills
+npx skills add "$SKILLS_REPO" -l       # list available skills, install nothing
+npx skills add "$SKILLS_REPO" --all    # all skills, all agents, no prompts
 ```
 
-Or authenticate over HTTPS with a token (uses `GITHUB_TOKEN` or your `gh` CLI auth):
+Over HTTPS instead: `GITHUB_TOKEN=ghp_xxx npx skills add kampanat-rua-nxz-group/just-got-skills`.
 
-```bash
-GITHUB_TOKEN=ghp_xxx npx skills add kampanat-rua-nxz-group/just-got-skills
-```
+> `npx skills check` / `update` skip private-repo skills ([skills#162](https://github.com/vercel-labs/skills/issues/162)) — use the symlink route below to stay current.
 
-`-g` installs globally (user-level); omit it to install into the current project.
-
-> **Heads-up:** `npx skills check` / `npx skills update` currently skip skills
-> installed from private repos (empty `skillFolderHash`,
-> [vercel-labs/skills#162](https://github.com/vercel-labs/skills/issues/162)), so
-> auto-updates won't work yet. To stay current, use the clone + symlink route below
-> and `git pull`.
-
-### Manual — clone + symlink (best for staying updated)
+### Alternative — clone + symlink (auto-updatable)
 
 ```bash
 git clone git@github.com:kampanat-rua-nxz-group/just-got-skills.git ~/just-got-skills
-ln -s ~/just-got-skills/skills/spec-hawk          ~/.claude/skills/spec-hawk
-ln -s ~/just-got-skills/skills/create-bug-ticket  ~/.claude/skills/create-bug-ticket
-ln -s ~/just-got-skills/skills/gcm                ~/.claude/skills/gcm
-ln -s ~/just-got-skills/skills/usecase-map        ~/.claude/skills/usecase-map
+ln -s ~/just-got-skills/skills/testing/spec-hawk         ~/.claude/skills/spec-hawk
+ln -s ~/just-got-skills/skills/testing/usecase-map       ~/.claude/skills/usecase-map
+ln -s ~/just-got-skills/skills/testing/create-bug-ticket ~/.claude/skills/create-bug-ticket
+ln -s ~/just-got-skills/skills/dev/gcm                   ~/.claude/skills/gcm
 ```
 
-`git pull` in `~/just-got-skills` then updates all four skills in place.
+`git pull` in `~/just-got-skills` then updates every linked skill in place.
 
-### Manual — copy into a project
+> **`spec-hawk` also needs its subagent** — the `skills` CLI installs skills, not agents:
+> ```bash
+> cp agents/automation-qa-reviewer.md ~/.claude/agents/
+> ```
+> Without it, `spec-hawk` falls back to running the same checklist inline.
 
-```bash
-cp -R skills/create-bug-ticket  /path/to/project/.claude/skills/
-```
+## Reference
 
-Restart Claude Code (or start a new session) so the skills are picked up.
+### Testing
 
-## Dependencies
+- **[spec-hawk](./skills/testing/spec-hawk/SKILL.md)** — Severity-tagged QA review of Playwright + TypeScript automation specs (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`/`NIT`) with `file:line` citations and fix snippets. `/spec-hawk`.
+- **[usecase-map](./skills/testing/usecase-map/SKILL.md)** — QA use-case mind map (`.xmind`) from a feature, user story, or API spec: Validation, Business Scenarios, Security & Edge, Coverage Gaps. Saves a Markdown outline to Obsidian; needs Python 3. `/usecase-map`.
+- **[create-bug-ticket](./skills/testing/create-bug-ticket/SKILL.md)** — Turn any QA input (screenshot, API response, DevTools output, automation failure) into a developer-ready Jira bug ticket.
 
-### `spec-hawk` needs its agent
+### Dev
 
-`spec-hawk` is a thin trigger — the actual review engine is the `automation-qa-reviewer` **subagent**, bundled here at [`agents/automation-qa-reviewer.md`](agents/automation-qa-reviewer.md). The `skills` CLI installs skills, **not** agents, so copy the agent manually after installing the skill:
-
-```bash
-# global (all projects)
-cp agents/automation-qa-reviewer.md ~/.claude/agents/
-
-# or per-project
-cp agents/automation-qa-reviewer.md /path/to/project/.claude/agents/
-```
-
-Both the skill and the agent are **repo-agnostic**: they discover your repo's own folder layout, tag scheme, shared package, and config conventions at review time rather than assuming a fixed structure. If the agent isn't installed, `spec-hawk` runs the same checklist inline as a fallback — the agent just gives cleaner, isolated results.
-
-### `create-bug-ticket`
-
-Self-contained (`SKILL.md` + `REFERENCE.md`). It invokes the public [`debug-mantra`](https://github.com/thananon/9arm-skills) skill when triaging automation failures; without it, that one step is skipped and the rest of the workflow still runs.
-
-### `usecase-map` needs Python + XMind
-
-The Markdown outline is written by Claude; `scripts/md2xmind.py` (bundled in the skill) renders it to XMind 2020+ format. Requires **Python 3** (no extra packages). The rendered `.xmind` file opens in XMind 26.x. The skill also saves the outline to your Obsidian vault — adjust the vault path in `SKILL.md` if needed.
-
-## Conventions
-
-Each skill lives in `skills/<name>/SKILL.md` with YAML frontmatter (`name`, `description`). Supporting docs sit alongside as `REFERENCE.md`. This layout matches the common Claude Code skill marketplaces (e.g. `mattpocock/skills`, `vercel-labs/skills`).
+- **[gcm](./skills/dev/gcm/SKILL.md)** — Conventional Commit messages from the working-tree diff; detects mixed concerns and emits a split-commit plan, warns on likely secrets/PII. Copy-paste text only, never runs git. `/gcm`.

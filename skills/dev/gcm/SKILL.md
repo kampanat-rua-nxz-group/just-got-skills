@@ -29,9 +29,10 @@ fix: handle null card ID in auth middleware
 - add fallback when CON_CODE is missing
 ```
 
-**(B)** A runnable line (text — user copies & runs it):
+**(B)** Two runnable lines (text — user copies & runs them separately):
 ```
-git add path/to/file.ts && git commit -m "fix: handle null card ID in auth middleware" -m "- guard against undefined debCardId before hashing" -m "- add fallback when CON_CODE is missing"
+git add path/to/file.ts
+git commit -m "fix: handle null card ID in auth middleware" -m "- guard against undefined debCardId before hashing" -m "- add fallback when CON_CODE is missing"
 ```
 Each `-m` = one paragraph/bullet. Use full `git commit -m`, not an alias.
 
@@ -39,9 +40,17 @@ Each `-m` = one paragraph/bullet. Use full `git commit -m`, not an alias.
 
 Present **numbered, sequential** steps — must run in order:
 
-> **1.** `git add auth/*.ts && git commit -m "feat(auth): ..." -m "..."`
-> **2.** `git add tests/*.spec.ts && git commit -m "test: ..." -m "..."`
-> **3.** `git add docs/*.md && git commit -m "docs: ..."`
+> **1.**
+> `git add auth/*.ts`
+> `git commit -m "feat(auth): ..." -m "..."`
+>
+> **2.**
+> `git add tests/*.spec.ts`
+> `git commit -m "test: ..." -m "..."`
+>
+> **3.**
+> `git add docs/*.md`
+> `git commit -m "docs: ..."`
 
 If a file is already staged that doesn't belong to step 1, call it out so the user can `git reset` it first.
 

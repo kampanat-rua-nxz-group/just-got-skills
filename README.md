@@ -36,6 +36,7 @@ ln -s ~/just-got-skills/skills/testing/spec-hawk         ~/.claude/skills/spec-h
 ln -s ~/just-got-skills/skills/testing/usecase-map       ~/.claude/skills/usecase-map
 ln -s ~/just-got-skills/skills/testing/create-bug-ticket ~/.claude/skills/create-bug-ticket
 ln -s ~/just-got-skills/skills/dev/gcm                   ~/.claude/skills/gcm
+ln -s ~/just-got-skills/skills/dev/draft-pr              ~/.claude/skills/draft-pr
 ```
 
 `git pull` in `~/just-got-skills` then updates every linked skill in place.
@@ -44,16 +45,17 @@ ln -s ~/just-got-skills/skills/dev/gcm                   ~/.claude/skills/gcm
 > ```bash
 > cp agents/automation-qa-reviewer.md ~/.claude/agents/
 > ```
-> Without it, `spec-hawk` falls back to running the same checklist inline.
+> Without it, `spec-hawk` falls back to running the same checklist inline (the full checklist ships with the skill as `CHECKLIST.md`).
 
 ## Reference
 
 ### Testing
 
 - **[spec-hawk](./skills/testing/spec-hawk/SKILL.md)** — Severity-tagged QA review of Playwright + TypeScript automation specs (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`/`NIT`) with `file:line` citations and fix snippets. `/spec-hawk`.
-- **[usecase-map](./skills/testing/usecase-map/SKILL.md)** — QA use-case mind map (`.xmind`) from a feature, user story, or API spec: Validation, Business Scenarios, Security & Edge, Coverage Gaps. Saves a Markdown outline to Obsidian; needs Python 3. `/usecase-map`.
+- **[usecase-map](./skills/testing/usecase-map/SKILL.md)** — QA use-case mind map (`.xmind`) from a feature, user story, or API spec: Validation, Business Scenarios, Security & Edge, Coverage Gaps. Saves a Markdown outline to the repo's `docs/testcases/` and renders the `.xmind` next to it; needs Python 3. `/usecase-map`.
 - **[create-bug-ticket](./skills/testing/create-bug-ticket/SKILL.md)** — Turn any QA input (screenshot, API response, DevTools output, automation failure) into a developer-ready Jira bug ticket.
 
 ### Dev
 
 - **[gcm](./skills/dev/gcm/SKILL.md)** — Conventional Commit messages from the working-tree diff; detects mixed concerns and emits a split-commit plan, warns on likely secrets/PII. Copy-paste text only, never runs git. `/gcm`.
+- **[draft-pr](./skills/dev/draft-pr/SKILL.md)** — PR title + description (Summary, Test plan) from the diff between the current branch and its base branch, using the repo's real test commands. Copy-paste text only, never runs git or `gh pr create`. `/draft-pr`.

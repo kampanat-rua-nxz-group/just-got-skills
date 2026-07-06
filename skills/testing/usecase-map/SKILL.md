@@ -1,6 +1,7 @@
 ---
 name: usecase-map
-description: Generate a QA use-case mind map (.xmind) from a feature description, user story, or API spec. Four branches: Validation matrix, gated Business Scenarios decision tree, Cross-cutting Security & Edge, Coverage Gaps. Saves Markdown outline to Obsidian vault and renders XMind file. Use when the user asks for a "use case map", "test case mind map", "QA use cases", "scenario coverage", or wants to map test coverage for a feature.
+description: Generate a QA use-case mind map from a feature description, user story, or API spec — a Markdown outline plus rendered .xmind in the repo's docs/testcases/, covering validation, gated business-scenario trees, security & edge, and coverage gaps. Use when the user asks for a "use case map", "test case mind map", "QA use cases", "scenario coverage", or wants to map test coverage for a feature.
+argument-hint: "[feature description, user story, or spec]"
 ---
 
 # Use Case Map
@@ -13,11 +14,11 @@ Feature in → QA use-case mind map out. Claude designs the Markdown outline; `s
 2. **Design four branches** (taxonomy below). Every scenario ends in expected-result leaf topics. Mark critical-path `[!]`.
 3. **Append Coverage Gaps** summary at outline bottom.
 4. **Save outline** to the project repo at `docs/testcases/<feature>-usecase-map.md`. Create the directory if it doesn't exist. No frontmatter required — plain Markdown only.
-5. **Render and open** (write `.xmind` next to the outline in `docs/testcases/`, not Downloads):
+5. **Render and open** (write `.xmind` next to the outline in `docs/testcases/`, not Downloads). Run the bundled script from this skill's own directory — resolve `<skill-dir>` from wherever this SKILL.md was loaded; do not assume `~/.claude/skills/`:
    ```bash
-   python3 ~/.claude/skills/usecase-map/scripts/md2xmind.py docs/testcases/<feature>-usecase-map.md \
+   python3 <skill-dir>/scripts/md2xmind.py docs/testcases/<feature>-usecase-map.md \
      -o "docs/testcases/<Feature Name>.xmind"
-   open "docs/testcases/<Feature Name>.xmind"
+   open "docs/testcases/<Feature Name>.xmind"   # `open` is macOS; use xdg-open on Linux
    ```
 
 Outline = source of truth. `.xmind` = disposable rendering. If user edits `.xmind` directly, sync outline back first.
@@ -95,7 +96,6 @@ Undocumented field → `TBD` per field (e.g. documented code, undocumented messa
 ## Outline conventions
 
 > Full annotated example and operational notes: `REFERENCE.md`
-
 
 - `#` root (one only), `##` branches, `-` bullets with 2-space indent
 - `> text` → note on topic; `[!]` → critical; `[P1]`–`[P3]` → priority (optional); `@label` → label

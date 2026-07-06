@@ -5,7 +5,7 @@ description: Generate Conventional Commit messages from the working-tree diff, d
 
 # gcm — git commit message generator
 
-Generates Conventional Commit messages from the diff. **Emits copy-paste text only — never runs `git add`, `git commit`, or `git push`** (project hook hard-blocks them; the skill respects that by design).
+Generates Conventional Commit messages from the diff. **Emits copy-paste text only — never runs `git add`, `git commit`, or `git push`** — some environments hard-block these via hooks; this skill never attempts them regardless.
 
 ## Workflow
 

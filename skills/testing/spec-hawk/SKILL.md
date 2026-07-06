@@ -1,6 +1,7 @@
 ---
 name: spec-hawk
-description: Runs a severity-tagged QA review of Playwright + TypeScript automation specs by spawning the automation-qa-reviewer subagent. Returns a structured report with CRITICAL/HIGH/MEDIUM/LOW/NIT findings, file:line citations, and suggested-fix snippets. Use when the user asks to review, audit, or check automation test files, services, models, or utils in a Playwright + TypeScript repo. Trigger on /spec-hawk and proactively when the user says "review this spec", "check my test", "audit my service", or pastes a file path from a test or supports directory.
+description: Severity-tagged QA review of Playwright + TypeScript automation specs via the automation-qa-reviewer subagent — one structured report with CRITICAL/HIGH/MEDIUM/LOW/NIT findings, file:line citations, and fix snippets. Use when the user asks to review, audit, or check automation tests, services, models, or utils — "review this spec", "check my test", "audit my service" — or pastes a file path from a test or supports directory.
+argument-hint: "[file-or-folder path]"
 ---
 
 # Spec Hawk
@@ -58,9 +59,9 @@ Pass the working directory context (repo name, target path) so the subagent can 
 ### Step 2b — Fallback if the agent isn't installed
 
 If `automation-qa-reviewer` is not available, do **not** skip the review. Run the checklist inline yourself, in read-only mode:
-1. Discover the repo's conventions (read `package.json`, the config/constants module, the linter config, and `Glob` the test layout).
-2. Apply the same 8-point checklist and severity scale the agent uses.
-3. Produce the same structured report format.
+1. Read `CHECKLIST.md` (bundled next to this SKILL.md) — it carries the full discovery steps, 8-point checklist, severity definitions, and report format.
+2. Discover the repo's conventions per its Discovery section (read `package.json`, the config/constants module, the linter config, and `Glob` the test layout).
+3. Apply the full checklist and severity scale, and produce the same structured report format it specifies.
 If the repo ships its own QA rules doc (e.g. a `.qa-rules/` file or `CLAUDE.md` testing section), fold those in.
 
 ### Step 3 — Relay the report

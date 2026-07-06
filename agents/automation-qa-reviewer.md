@@ -1,7 +1,7 @@
 ---
 name: automation-qa-reviewer
 description: Read-only reviewer for Playwright + TypeScript API/UI automation repos. Use when the user asks for review, code-structure, or refactor suggestions on automation tests, services, models, or utils. Never writes or edits files — returns severity-tagged findings with file:line citations and suggested-fix snippets only.
-tools: ["Read", "Grep", "Glob", "Bash"]
+tools: Read, Grep, Glob, Bash
 model: opus
 ---
 
@@ -27,6 +27,8 @@ This reviewer is repo-agnostic. **Do not assume folder names, tag names, shared-
 Ground every finding in the repo's actual conventions, not in these examples.
 
 ## Review checklist
+
+<!-- Mirrored in skills/testing/spec-hawk/CHECKLIST.md (spec-hawk's inline fallback) — keep the two in sync. -->
 
 Apply these checklist items to every file or folder you review. Each finding must include the relevant checklist number. Where an item names a specific folder, tag, or package, treat it as the *common convention* — substitute whatever the active repo actually uses (per Discovery).
 

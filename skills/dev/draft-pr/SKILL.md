@@ -33,9 +33,6 @@ type(scope): subject
 ```markdown
 ## Summary
 - ...
-
-## Test plan
-- [ ] ...
 ```
 
 ## Never

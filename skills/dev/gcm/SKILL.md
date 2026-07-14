@@ -1,59 +1,49 @@
 ---
 name: gcm
-description: Generate Conventional Commit messages from the working-tree diff, detect when changes mix multiple concerns, and emit a split-commit plan as copy-paste text. Use when the user asks for a commit message, says "write a commit message", "what should this commit say", "commit this", "gcm", or wants help wording or splitting a commit.
+description: Generate Conventional Commit messages from the working-tree diff, flag when changes mix concerns, and emit a split-commit plan as copy-paste text. Use for commit-message wording, splitting a commit, "commit this", or the "gcm" trigger.
 ---
 
 # gcm — git commit message generator
 
-Generates Conventional Commit messages from the diff. **Emits copy-paste text only — never runs `git add`, `git commit`, or `git push`** — some environments hard-block these via hooks; this skill never attempts them regardless.
+Generates Conventional Commit messages from the diff. **Emits copy-paste text only — never runs `git add`/`commit`/`push`.**
+
+Out of scope: amend, rebase, `git add -p` execution, hook fixes. Wording and staging plans only.
 
 ## Workflow
 
-1. **Read the diff** (read-only): `git status --short`, `git diff --staged`, `git diff`.
-   Note which files are already staged — the plan must respect existing staging, not silently override it.
-2. **Decide: single concern or many?** Group changed files by meaning (Conventional Commit type/scope: `feat`/`fix`/`docs`/`chore`/`test`/`perf`/`refactor`). One concern → one commit. Multiple → split plan.
-3. **Mixed-hunk files**: if one file mixes concerns (e.g. feature + bugfix in the same file), you can't split it with `git add <file>`. Flag it and suggest `git add -p <file>`, stating which hunks belong to which commit.
-4. **Secret/PII check (best-effort)**: scan the diff for long digit runs (13-digit card / national IDs), `key=`/`token`/`secret`/`password` patterns. If anything looks sensitive, warn `Diff may contain a secret/PII — review before committing` and never put the literal value in the message. This is a heuristic, not a guaranteed scanner.
+1. **Read the diff** (read-only): `git status --short`, `git diff --staged`, `git diff`. Note which files are already staged — respect existing staging, don't silently override it.
+2. **Single concern or many?** Group changed files by meaning. Type must be one of the commitlint `config-conventional` set: `build` `chore` `ci` `docs` `feat` `fix` `perf` `refactor` `revert` `style` `test`. One concern → one commit; multiple → split plan.
+3. **Mixed-hunk files**: one file mixing concerns can't be split with `git add <file>`. Flag it, suggest `git add -p <file>`, and state which hunks go to which commit.
+4. **Secret/PII check (heuristic)**: scan for long digit runs (card/national IDs) and `key=`/`token`/`secret`/`password` patterns. On a hit, warn `Diff may contain a secret/PII — review before committing` and never echo the literal value.
 
 ## Output format
 
-All messages in **English**, Conventional Commits, subject + body bullets when the change spans multiple files.
+English, Conventional Commits (commitlint `config-conventional`), subject + body bullets when the change spans multiple files. Enforce:
 
-For each commit, emit two things:
+- **Header ≤ 100 chars** — the whole `type(scope): subject` line. Tighten wording or push detail to bullets, never exceed.
+- **Subject** lowercase start (no sentence/start/pascal/upper case), **no trailing period**.
+- **Type** lowercase, from the set above.
+- **Body/footer lines ≤ 100 chars each** — wrap long bullets across lines.
 
-**(A)** Human-readable message in a code block:
-```
-fix: handle null card ID in auth middleware
+Emit runnable lines only — the `git commit -m` args *are* the message, so don't also print a separate message block. Each `-m` = one paragraph/bullet; use full `git commit -m`, not an alias.
 
-- guard against undefined debCardId before hashing
-- add fallback when CON_CODE is missing
-```
-
-**(B)** Two runnable lines (text — user copies & runs them separately):
 ```
 git add path/to/file.ts
-git commit -m "fix: handle null card ID in auth middleware" -m "- guard against undefined debCardId before hashing" -m "- add fallback when CON_CODE is missing"
+git commit -m "fix: handle null card ID in auth middleware" -m "- guard undefined debCardId before hashing" -m "- add fallback when CON_CODE is missing"
 ```
-Each `-m` = one paragraph/bullet. Use full `git commit -m`, not an alias.
 
 ### Split plan (multiple concerns)
 
-Present **numbered, sequential** steps — must run in order:
+Numbered, **sequential** — run in order:
 
-> **1.**
-> `git add auth/*.ts`
+> **1.** `git add auth/*.ts`
 > `git commit -m "feat(auth): ..." -m "..."`
 >
-> **2.**
-> `git add tests/*.spec.ts`
+> **2.** `git add tests/*.spec.ts`
 > `git commit -m "test: ..." -m "..."`
->
-> **3.**
-> `git add docs/*.md`
-> `git commit -m "docs: ..."`
 
-If a file is already staged that doesn't belong to step 1, call it out so the user can `git reset` it first.
+If a file is already staged that doesn't belong to step 1, say so — the user resets it first.
 
 ## Always end with
 
-A one-line reminder: `Run tests/typecheck before committing` (project rule: no commits with failing tests or type errors).
+`Run tests/typecheck before committing` (no commits with failing tests or type errors).

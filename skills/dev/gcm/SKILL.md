@@ -24,6 +24,9 @@ English, Conventional Commits (commitlint `config-conventional`), subject + body
 - **Subject** lowercase start (no sentence/start/pascal/upper case), **no trailing period**.
 - **Type** lowercase, from the set above.
 - **Body/footer lines ≤ 100 chars each** — wrap long bullets across lines.
+- **Blank line** before body and before footer; **subject and type never empty**.
+
+Full rule table (levels, breaking-change syntax) in [`REFERENCE.md`](REFERENCE.md).
 
 Emit runnable lines only — the `git commit -m` args *are* the message, so don't also print a separate message block. Each `-m` = one paragraph/bullet; use full `git commit -m`, not an alias.
 

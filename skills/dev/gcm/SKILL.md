@@ -20,10 +20,9 @@ Out of scope: amend, rebase, `git add -p` execution, hook fixes. Wording and sta
 
 English, Conventional Commits (commitlint `config-conventional`), subject + body bullets when the change spans multiple files. Enforce:
 
-- **Header ≤ 100 chars** — the whole `type(scope): subject` line. Tighten wording or push detail to bullets, never exceed.
+- **Every line ≤ 100 chars** — the whole message: the `type(scope): subject` header and each body/footer line. Tighten wording, push detail to bullets, or wrap long bullets across lines; never exceed.
 - **Subject** lowercase start (no sentence/start/pascal/upper case), **no trailing period**.
 - **Type** lowercase, from the set above.
-- **Body/footer lines ≤ 100 chars each** — wrap long bullets across lines.
 - **Blank line** before body and before footer; **subject and type never empty**.
 
 Full rule table (levels, breaking-change syntax) in [`REFERENCE.md`](REFERENCE.md).
@@ -37,13 +36,17 @@ git commit -m "fix: handle null card ID in auth middleware" -m "- guard undefine
 
 ### Split plan (multiple concerns)
 
-Numbered, **sequential** — run in order:
+Numbered, **sequential** — run in order. Emit as a plain code block so it copy-pastes cleanly (no blockquote):
 
-> **1.** `git add auth/*.ts`
-> `git commit -m "feat(auth): ..." -m "..."`
->
-> **2.** `git add tests/*.spec.ts`
-> `git commit -m "test: ..." -m "..."`
+```
+# 1.
+git add auth/*.ts
+git commit -m "feat(auth): ..." -m "..."
+
+# 2.
+git add tests/*.spec.ts
+git commit -m "test: ..." -m "..."
+```
 
 If a file is already staged that doesn't belong to step 1, say so — the user resets it first.
 

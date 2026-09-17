@@ -88,6 +88,16 @@ Each function should do **one clear thing** that a reviewer or teammate can unde
 
 These findings typically land at **MEDIUM** (refactor needed for maintainability) or **LOW** (minor smell). Use **HIGH** only when the complexity makes the test behavior actually ambiguous (e.g. a deeply-nested branch hides a missing assertion).
 
+### 9. Race-prone shared test data (parallel workers)
+Checks whether the config runs multiple workers or `fullyParallel: true` — if so, tests in different files can execute concurrently and collide on shared external state (DB rows, wallet addresses, merchant IDs, emails). This class of bug is invisible in a single-test run and only shows up under full-suite/regression runs — "passes alone, flakes in CI" is the signature symptom. Do not wave this off as flakiness; trace it to a concrete collision before dismissing it.
+
+- Check the runner config (`playwright.config.ts` or equivalent) for `fullyParallel: true` or `workers > 1`. If the suite is forced fully serial (`workers: 1`, no `fullyParallel`), this check is low-priority — note it and move on.
+- Otherwise, `Grep` across all spec files in the reviewed folder (and, budget permitting, the wider `testCases/` tree) for the same hardcoded literal used as the *target of a create/update/delete* — a fixed env var (`ENV.WALLET_ADDRESS_*`, `ENV.MERCHANT_ID_*`), a literal address/email/ID, or a fixture field reused as a unique key.
+- Flag when the same literal appears in **two or more spec files** AND at least one of those tests creates, deletes, or mutates the record behind it (`afterEach`/`afterAll` cleanup, a duplicate-detection test doing create-then-create-again, an update-then-verify sequence). Two workers touching the same identifier concurrently is a real race, not a hypothetical — flag it even if the current diff's tests are currently green.
+- Report the exact colliding locations: every `file:line` where the literal is used to create/mutate, so the user can see the collision pair, not just one side.
+- Suggested fix: give each spec file (or each test that persists data) its own dedicated identifier/address/ID pulled from config, so no two concurrently-runnable tests target the same external record. Cross-file serialization (`test.describe.configure({ mode: "serial" })` is file-scoped only) is a fallback, not the first suggestion — it slows the whole suite down for one collision.
+- Severity: **CRITICAL** — this is "broken isolation that contaminates other tests" per the severity table, even though it manifests as intermittent rather than deterministic failure.
+
 ## Severity definitions
 
 | Level | Use when |

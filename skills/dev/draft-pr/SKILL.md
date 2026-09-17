@@ -22,19 +22,23 @@ Generates a PR title + description from the branch diff. **Read-only — never r
 
 ## Output format
 
-Two fenced blocks, nothing else:
+One fenced `bash` block containing a ready-to-run `gh pr create` command, nothing else. Use `--base <detected base>` and `--head <current branch>` (only include `--head` when drafting for a branch other than the one already checked out), title via `--title`, and body via `--body "$(cat <<'EOF' ... EOF)"` so multi-line markdown survives shell quoting untouched:
 
-**Title:**
-```
-type(scope): subject
-```
-
-**Description:**
-```markdown
+```bash
+gh pr create --base main --head feature/my-branch \
+  --title "type(scope): subject" \
+  --body "$(cat <<'EOF'
 ## Summary
 - ...
+
+## Test plan
+- [ ] ...
+EOF
+)"
 ```
 
+When drafting for multiple branches in one request, emit one such block per branch, each in its own fenced code block, in the order the branches were given.
+
 ## Never
-- Never run `git commit`, `git add`, `git push`, or `gh pr create`
+- Never run `git commit`, `git add`, `git push`, or `gh pr create` — only emit the command as text for the user to run
 - Never invent test/build commands not found in the repo's `package.json`, README, or CI config — if none are discoverable, say so explicitly and mark any fallback steps as unverified

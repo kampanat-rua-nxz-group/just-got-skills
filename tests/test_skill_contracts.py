@@ -51,7 +51,7 @@ BUG_TICKET_SECTIONS = (
 BUG_TICKET_CONTRACT = (
     "Jira bug ticket",
     "debug-mantra",
-    "Flaky / selector / test-data / stale-assertion failures are test fixes",
+    "Flaky / selector / test-data / stale-assertion failures are test fixes — say so and stop",
     "FE Bug",
     "BE Bug",
     "Critical / High / Medium / Low",

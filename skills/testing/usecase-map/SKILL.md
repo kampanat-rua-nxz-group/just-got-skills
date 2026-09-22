@@ -1,12 +1,12 @@
 ---
 name: usecase-map
-description: Generate a QA use-case mind map from a feature description, user story, or API spec — a Markdown outline plus rendered .xmind in the repo's docs/testcases/, covering validation, gated business-scenario trees, security & edge, and coverage gaps. Use when the user asks for a "use case map", "test case mind map", "QA use cases", "scenario coverage", or wants to map test coverage for a feature.
+description: Use when the user asks for a QA use-case map, test-case mind map, scenario coverage, or validation and business-flow coverage for a feature, user story, or API specification.
 argument-hint: "[feature description, user story, or spec]"
 ---
 
 # Use Case Map
 
-Feature in → QA use-case mind map out. Claude designs the Markdown outline; `scripts/md2xmind.py` renders it to native XMind 2020+ format (JSON, opens in XMind 26.x with full note support).
+Feature in → QA use-case mind map out. The workflow has the agent design the Markdown outline; `scripts/md2xmind.py` renders it to `.xmind`.
 
 ## Workflow
 
@@ -14,12 +14,12 @@ Feature in → QA use-case mind map out. Claude designs the Markdown outline; `s
 2. **Design four branches** (taxonomy below). Every scenario ends in expected-result leaf topics. Mark critical-path `[!]`.
 3. **Append Coverage Gaps** summary at outline bottom.
 4. **Save outline** to the project repo at `docs/testcases/<feature>-usecase-map.md`. Create the directory if it doesn't exist. No frontmatter required — plain Markdown only.
-5. **Render and open** (write `.xmind` next to the outline in `docs/testcases/`, not Downloads). Run the bundled script from this skill's own directory — resolve `<skill-dir>` from wherever this SKILL.md was loaded; do not assume `~/.claude/skills/`:
+5. **Render and conditionally open** (write `.xmind` next to the outline in `docs/testcases/`, not Downloads). Run the bundled script from this skill's own directory — resolve `<skill-dir>` from wherever this SKILL.md was loaded; do not assume `~/.claude/skills/`:
    ```bash
    python3 <skill-dir>/scripts/md2xmind.py docs/testcases/<feature>-usecase-map.md \
      -o "docs/testcases/<Feature Name>.xmind"
-   open "docs/testcases/<Feature Name>.xmind"   # `open` is macOS; use xdg-open on Linux
    ```
+   Use the platform opener when desktop access is available (`open` on macOS, `xdg-open` on Linux); otherwise report the generated path.
 
 Outline = source of truth. `.xmind` = disposable rendering. If user edits `.xmind` directly, sync outline back first.
 
@@ -64,7 +64,7 @@ Off-path, multi-point concerns only (auth/authz = gates 3–4; infra = gates 1�
 
 ### 4. Coverage Gaps
 
-Append at outline bottom. Claude authors by reading the built tree. List:
+Append at outline bottom. The agent authors it by reading the built tree. List:
 
 - **`@blocked-tbd` / `TBD` forks** — every fork with undocumented values
 - **Skipped gates** — every `> skip: <reason>` gate
@@ -101,4 +101,3 @@ Undocumented field → `TBD` per field (e.g. documented code, undocumented messa
 - `> text` → note on topic; `[!]` → critical; `[P1]`–`[P3]` → priority (optional); `@label` → label
 - `<br>` inside title → line break (prefer separate siblings)
 - `[pos]`/`[neg]` prefix for positive/negative variants nested under their scenario
-- Script validates outline and fails with a line number on malformed input — fix outline, don't patch script output

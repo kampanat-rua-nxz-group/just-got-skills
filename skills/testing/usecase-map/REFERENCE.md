@@ -89,5 +89,5 @@ Detailed examples and operational notes. Not loaded by default — consult when 
 ## Notes
 
 - Script validates the outline and fails with a line number on malformed input — fix the outline, don't patch the script output.
-- Output uses XMind 2020+ JSON format (`content.json` + `metadata.json`). Opens natively in XMind 26.x with full note support. Not backward-compatible with XMind 8.
+- Output uses XMind 2020+ JSON archive format (`content.json`, `metadata.json`, and `manifest.json`). Opens natively in XMind 26.x with full note support. Not backward-compatible with XMind 8.
 - Same-indent bullets are siblings (anchored to the nearest heading) — regression-test this after any script change; a past bug chained them as children.

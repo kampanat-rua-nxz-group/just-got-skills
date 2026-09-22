@@ -7,6 +7,7 @@ DRAFT_PR = ROOT / "skills/dev/draft-pr/SKILL.md"
 GCM = ROOT / "skills/dev/gcm/SKILL.md"
 BUG_TICKET = ROOT / "skills/testing/create-bug-ticket/SKILL.md"
 BUG_TICKET_REFERENCE = ROOT / "skills/testing/create-bug-ticket/REFERENCE.md"
+USECASE_MAP = ROOT / "skills/testing/usecase-map/SKILL.md"
 
 DRAFT_PR_CONTRACT = (
     "gh pr create",
@@ -110,6 +111,65 @@ class BugTicketContractTest(unittest.TestCase):
         ticket_contract = body(BUG_TICKET) + BUG_TICKET_REFERENCE.read_text(encoding="utf-8")
         assert_contains_all(ticket_contract, BUG_TICKET_SECTIONS)
         assert_contains_all(ticket_contract, BUG_TICKET_CONTRACT)
+
+
+class UsecaseMapContractTest(unittest.TestCase):
+    DESCRIPTION = (
+        "Use when the user asks for a QA use-case map, test-case mind map, "
+        "scenario coverage, or validation and business-flow coverage for a "
+        "feature, user story, or API specification."
+    )
+    BRANCHES = (
+        "### 1. Validation Cases",
+        "### 2. Business Scenarios (gated decision tree)",
+        "### 3. Cross-cutting (Security & Edge)",
+        "### 4. Coverage Gaps",
+    )
+    GATES = (
+        "Service reachable?",
+        "Dependencies available?",
+        "Authenticated?",
+        "Authorized?",
+        "Business rules",
+        "Resource/state",
+        "→ Success",
+    )
+    COVERAGE_GAPS = (
+        "`@blocked-tbd` / `TBD` forks",
+        "Skipped gates",
+        "Continuation with no fail fork",
+    )
+    LABELS = (
+        "`@mock-only`",
+        "`@nondeterministic`",
+        "`@manual`",
+        "`@blocked-tbd`",
+    )
+
+    def test_description_is_trigger_focused_and_runtime_neutral(self):
+        description = frontmatter(USECASE_MAP)["description"]
+        self.assertEqual(description, self.DESCRIPTION)
+        self.assertNotIn("Markdown outline", description)
+        self.assertNotIn(".xmind", description)
+
+    def test_workflow_preserves_taxonomy_gates_and_portable_rendering(self):
+        entrypoint = body(USECASE_MAP)
+
+        positions = [entrypoint.index(branch) for branch in self.BRANCHES]
+        self.assertEqual(positions, sorted(positions))
+        assert_contains_all(entrypoint, self.GATES)
+        assert_contains_all(entrypoint, self.COVERAGE_GAPS)
+        assert_contains_all(entrypoint, self.LABELS)
+        assert_contains_all(entrypoint, (
+            "docs/testcases/<feature>-usecase-map.md",
+            '"docs/testcases/<Feature Name>.xmind"',
+            "python3 <skill-dir>/scripts/md2xmind.py",
+            "Outline = source of truth.",
+            "platform opener when desktop access is available",
+            "report the generated path",
+            "the agent",
+        ))
+        self.assertNotIn("Claude", entrypoint)
 
 
 class SpecHawkContractTest(unittest.TestCase):

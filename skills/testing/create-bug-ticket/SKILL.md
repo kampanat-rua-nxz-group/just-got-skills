@@ -22,7 +22,7 @@ Invoke `debug-mantra`, then:
 2. Record whether it is deterministic or intermittent; include the observed rate in Frequency.
 3. Localize the failure to product code or test code.
 
-Continue only with a confirmed product defect. Flaky / selector / test-data / stale-assertion failures are test fixes — say so and stop. Use `REFERENCE.md` → **Automation-sourced Bugs** for the triage table and confirmation criteria.
+Continue only with a confirmed product defect. Flaky / selector / test-data / stale-assertion failures are test fixes — say so and stop. Use [Automation-sourced Bugs](REFERENCE.md#automation-sourced-bugs--triage-before-filing) for the triage table and confirmation criteria.
 
 **Step 1 — Extract facts and resolve required gaps:**
 
@@ -36,7 +36,7 @@ Continue only with a confirmed product defect. Flaky / selector / test-data / st
    - BE: `[GET /api/v1/portfolio/summary] Returns stale data when coin filter is changed`
    - Use an exact feature, page, or endpoint tag; `[UI]`, `[API]`, and `[Backend]` need an exact replacement.
 
-2. **Environment** — use the FE or BE table in `REFERENCE.md` → **Environment Tables**.
+2. **Environment** — use the FE or BE table in [Environment Tables](REFERENCE.md#environment-tables).
 
 3. **Description** — 2–4 sentences covering the feature, failure, evidence, and scope.
 
@@ -46,12 +46,12 @@ Continue only with a confirmed product defect. Flaky / selector / test-data / st
 
 6. **Actual Result** — include exact errors, observed API calls, and silent failures.
 
-7. **Impact / Severity** — use the table and severity guidance in `REFERENCE.md` → **Severity Selection**.
+7. **Impact / Severity** — use the table and severity guidance in [Severity Selection](REFERENCE.md#severity-selection).
 
-8. **Root Cause** — state a confirmed or suspected layer, specific detail, and suggested fix; use `likely` or `possibly` for a hypothesis. Select the issue type with `REFERENCE.md` → **Issue Type Definitions**.
+8. **Root Cause** — state a confirmed or suspected layer, specific detail, and suggested fix; use `likely` or `possibly` for a hypothesis. Select the issue type with [Issue Type Definitions](REFERENCE.md#issue-type-definitions).
 
 9. **Attachments** — table every piece of evidence; otherwise write: `No attachments provided. QA to attach before filing.`
 
 10. **QA Note** — a `> 💡 **QA Note:**` block covering regression scenarios, edge cases, and related components.
 
-Before presenting, apply `REFERENCE.md` → **Tone Contract** and complete its **Quality Checklist**.
+Before presenting, apply [Tone Contract](REFERENCE.md#tone-contract) and complete its [Quality Checklist](REFERENCE.md#quality-checklist).

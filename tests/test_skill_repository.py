@@ -16,19 +16,50 @@ class SkillRepositoryValidationTest(unittest.TestCase):
         path.write_text(body, encoding="utf-8")
         return path
 
-    def test_accepts_valid_skill_and_local_reference(self):
+    def test_accepts_valid_skill_and_local_reference_heading(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.write_skill(
                 root,
                 "example-skill",
                 "---\nname: example-skill\ndescription: Use when reviewing examples.\n---\n"
-                "Read [the reference](REFERENCE.md) when exact rules are needed.\n",
+                "Read [the exact rules](REFERENCE.md#exact-rules) when needed.\n",
             )
             (root / "skills/testing/example-skill/REFERENCE.md").write_text(
-                "# Reference\n", encoding="utf-8"
+                "# Reference\n\n## Exact Rules\n", encoding="utf-8"
             )
             self.assertEqual([], validate_repository(root))
+
+    def test_reports_missing_local_link_target(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_skill(
+                root,
+                "example-skill",
+                "---\nname: example-skill\ndescription: Use when reviewing examples.\n---\n"
+                "Read [the reference](MISSING.md#exact-rules).\n",
+            )
+
+            errors = "\n".join(validate_repository(root))
+
+            self.assertIn("missing local link MISSING.md#exact-rules", errors)
+
+    def test_reports_missing_local_heading_fragment(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_skill(
+                root,
+                "example-skill",
+                "---\nname: example-skill\ndescription: Use when reviewing examples.\n---\n"
+                "Read [the reference](REFERENCE.md#missing-rules).\n",
+            )
+            (root / "skills/testing/example-skill/REFERENCE.md").write_text(
+                "# Reference\n\n## Exact Rules\n", encoding="utf-8"
+            )
+
+            errors = "\n".join(validate_repository(root))
+
+            self.assertIn("missing local heading REFERENCE.md#missing-rules", errors)
 
     def test_reports_name_link_frontmatter_and_scaffold_errors(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -1,6 +1,8 @@
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
+import sys
 from tempfile import TemporaryDirectory
 import unittest
 import zipfile
@@ -65,7 +67,7 @@ class Md2XmindTest(unittest.TestCase):
             ["first", "second"],
         )
 
-    def test_write_xmind_creates_native_archive_files(self):
+    def test_write_xmind_serializes_native_archive_content(self):
         root = md2xmind.parse_outline(VALID_OUTLINE)
         content = md2xmind.build_content_json(root)
 
@@ -76,6 +78,37 @@ class Md2XmindTest(unittest.TestCase):
                 self.assertEqual(
                     set(zf.namelist()),
                     {"content.json", "metadata.json", "manifest.json"},
+                )
+                serialized = json.loads(zf.read("content.json"))
+                self.assertEqual(len(serialized), 1)
+                root_topic = serialized[0]["rootTopic"]
+                self.assertEqual(root_topic["title"], "Payments")
+                self.assertEqual(
+                    root_topic["markers"], [{"markerId": "symbol-exclam"}]
+                )
+                branches = root_topic["children"]["attached"]
+                self.assertEqual(
+                    [branch["title"] for branch in branches],
+                    [
+                        "Validation Cases",
+                        "Business Scenarios",
+                        "Cross-cutting (Security & Edge)",
+                        "Coverage Gaps",
+                    ],
+                )
+                endpoint = branches[0]["children"]["attached"][0]
+                self.assertEqual(endpoint["title"], "POST /payments")
+                self.assertEqual(endpoint["labels"], ["security"])
+                self.assertEqual(
+                    endpoint["notes"], {"plain": {"content": "contract note"}}
+                )
+                valid_request = endpoint["children"]["attached"][0]
+                self.assertEqual(
+                    valid_request["markers"], [{"markerId": "priority-1"}]
+                )
+                self.assertEqual(
+                    valid_request["children"]["attached"][0]["title"],
+                    "HTTP Status 200",
                 )
                 self.assertEqual(
                     json.loads(zf.read("metadata.json")),
@@ -89,6 +122,42 @@ class Md2XmindTest(unittest.TestCase):
                         "layoutEngineVersion": "3",
                     },
                 )
+
+    def test_cli_renders_valid_outline(self):
+        with TemporaryDirectory() as directory:
+            directory_path = Path(directory)
+            outline = directory_path / "payments.md"
+            archive = directory_path / "payments.xmind"
+            outline.write_text(VALID_OUTLINE, encoding="utf-8")
+
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), str(outline), "-o", str(archive)],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue(archive.is_file())
+            self.assertIn(f"Created: {archive} (11 topics)", result.stdout)
+
+    def test_cli_rejects_invalid_outline_with_line_specific_error(self):
+        with TemporaryDirectory() as directory:
+            directory_path = Path(directory)
+            outline = directory_path / "invalid.md"
+            archive = directory_path / "invalid.xmind"
+            outline.write_text("# Root\nplain text\n", encoding="utf-8")
+
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), str(outline), "-o", str(archive)],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Error: Line 2: unrecognized outline line", result.stderr)
+            self.assertFalse(archive.exists())
 
     def test_parse_outline_rejects_note_before_topic_with_line_number(self):
         with self.assertRaisesRegex(ValueError, r"Line 1"):

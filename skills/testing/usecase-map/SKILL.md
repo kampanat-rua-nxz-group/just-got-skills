@@ -95,7 +95,7 @@ Undocumented field → `TBD` per field (e.g. documented code, undocumented messa
 
 ## Outline conventions
 
-> Full annotated example and operational notes: `REFERENCE.md`
+> Full [annotated example](REFERENCE.md#full-annotated-example) and [operational notes](REFERENCE.md#notes).
 
 - `#` root (one only), `##` branches, `-` bullets with 2-space indent
 - `> text` → note on topic; `[!]` → critical; `[P1]`–`[P3]` → priority (optional); `@label` → label

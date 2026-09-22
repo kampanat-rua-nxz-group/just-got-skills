@@ -5,6 +5,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 DRAFT_PR = ROOT / "skills/dev/draft-pr/SKILL.md"
 GCM = ROOT / "skills/dev/gcm/SKILL.md"
+GCM_REFERENCE = ROOT / "skills/dev/gcm/REFERENCE.md"
 BUG_TICKET = ROOT / "skills/testing/create-bug-ticket/SKILL.md"
 BUG_TICKET_REFERENCE = ROOT / "skills/testing/create-bug-ticket/REFERENCE.md"
 USECASE_MAP = ROOT / "skills/testing/usecase-map/SKILL.md"
@@ -30,6 +31,16 @@ GCM_CONTRACT = (
     "Run tests/typecheck before committing",
 )
 
+GCM_INTERACTIVE_STAGING_CONTRACT = (
+    "#   hunk 1  src/auth.ts:12-28   guard undefined debCardId        → y",
+    "#   hunk 2  src/auth.ts:40-44   rename local in the test helper  → n",
+    "#   hunk 3  src/auth.ts:71-95   two concerns in one hunk         → s, then y n",
+    "If a hunk still mixes concerns after `s`, say `e` and describe which lines to keep.",
+    "# 1b. verify what got staged",
+    "git diff --staged",
+    "Every skipped hunk must reappear in a later numbered step",
+)
+
 BUG_TICKET_DESCRIPTION = (
     "Use when the user wants to document or file a defect from QA evidence "
     "such as text, screenshots, API responses, DevTools output, automation "
@@ -49,14 +60,42 @@ BUG_TICKET_SECTIONS = (
     "QA Note",
 )
 
-BUG_TICKET_CONTRACT = (
-    "Jira bug ticket",
-    "debug-mantra",
+BUG_TICKET_STOP_GUARD = (
     "Flaky / selector / test-data / stale-assertion failures are test fixes — say so and stop",
+)
+
+BUG_TICKET_REFERENCE_CONTRACT = (
     "FE Bug",
     "BE Bug",
     "Critical / High / Medium / Low",
     "## Quality Checklist",
+)
+
+BUG_TICKET_REFERENCE_ONLY_MATERIAL = (
+    "| **Environment** | Staging / Production / Development / UAT |",
+    "| **Critical** | System crash, data loss, security issue, complete feature outage blocking all users |",
+    "| 1 | **Environment / Configuration** |",
+    "- Write in English for two audiences:",
+    "- [ ] Title is specific and includes exact component / page / endpoint tag",
+)
+
+BUG_TICKET_REFERENCE_LINKS = (
+    "[Automation-sourced Bugs](REFERENCE.md#automation-sourced-bugs--triage-before-filing)",
+    "[Environment Tables](REFERENCE.md#environment-tables)",
+    "[Severity Selection](REFERENCE.md#severity-selection)",
+    "[Issue Type Definitions](REFERENCE.md#issue-type-definitions)",
+    "[Tone Contract](REFERENCE.md#tone-contract)",
+    "[Quality Checklist](REFERENCE.md#quality-checklist)",
+)
+
+USECASE_REFERENCE_LINKS = (
+    "[annotated example](REFERENCE.md#full-annotated-example)",
+    "[operational notes](REFERENCE.md#notes)",
+)
+
+README_PRIVATE_ACCESS_CONTRACT = (
+    "SKILLS_REPO=git@github.com:kampanat-rua-nxz-group/just-got-skills.git",
+    "GITHUB_TOKEN=ghp_xxx npx skills add kampanat-rua-nxz-group/just-got-skills",
 )
 
 
@@ -92,6 +131,21 @@ class DevSkillContractTest(unittest.TestCase):
     def test_gcm_preserves_command_contract(self):
         assert_contains_all(body(GCM), GCM_CONTRACT)
 
+    def test_gcm_interactive_staging_reference_preserves_guided_accounting(self):
+        reference = GCM_REFERENCE.read_text(encoding="utf-8")
+
+        assert_contains_all(reference, GCM_INTERACTIVE_STAGING_CONTRACT)
+        prompt_order = [
+            reference.index(fragment)
+            for fragment in GCM_INTERACTIVE_STAGING_CONTRACT[:3]
+        ]
+        self.assertEqual(prompt_order, sorted(prompt_order))
+        staged_verification = reference.index("# 1b. verify what got staged")
+        staged_diff = reference.index("git diff --staged", staged_verification)
+        commit = reference.index("git commit -m \"fix(auth): guard null card ID before hashing\"")
+        self.assertLess(staged_verification, staged_diff)
+        self.assertLess(staged_diff, commit)
+
     def test_descriptions_are_trigger_focused_not_output_focused(self):
         for path in (DRAFT_PR, GCM):
             description = frontmatter(path)["description"]
@@ -107,10 +161,22 @@ class BugTicketContractTest(unittest.TestCase):
     def test_description_is_a_compact_evidence_trigger(self):
         self.assertEqual(frontmatter(BUG_TICKET)["description"], BUG_TICKET_DESCRIPTION)
 
-    def test_jira_template_and_triage_contract_are_preserved(self):
-        ticket_contract = body(BUG_TICKET) + BUG_TICKET_REFERENCE.read_text(encoding="utf-8")
-        assert_contains_all(ticket_contract, BUG_TICKET_SECTIONS)
-        assert_contains_all(ticket_contract, BUG_TICKET_CONTRACT)
+    def test_skill_keeps_ticket_skeleton_and_automation_stop_guard(self):
+        entrypoint = body(BUG_TICKET)
+
+        assert_contains_all(entrypoint, BUG_TICKET_SECTIONS)
+        assert_contains_all(entrypoint, BUG_TICKET_STOP_GUARD)
+        for fragment in BUG_TICKET_REFERENCE_ONLY_MATERIAL:
+            self.assertNotIn(fragment, entrypoint)
+
+    def test_reference_keeps_environment_severity_issue_type_tone_and_checklist(self):
+        reference = BUG_TICKET_REFERENCE.read_text(encoding="utf-8")
+
+        assert_contains_all(reference, BUG_TICKET_REFERENCE_CONTRACT)
+        assert_contains_all(reference, BUG_TICKET_REFERENCE_ONLY_MATERIAL)
+
+    def test_entrypoint_links_each_routed_reference_section(self):
+        assert_contains_all(body(BUG_TICKET), BUG_TICKET_REFERENCE_LINKS)
 
 
 class UsecaseMapContractTest(unittest.TestCase):
@@ -170,6 +236,9 @@ class UsecaseMapContractTest(unittest.TestCase):
             "the agent",
         ))
         self.assertNotIn("Claude", entrypoint)
+
+    def test_entrypoint_links_annotated_example_and_operational_notes(self):
+        assert_contains_all(body(USECASE_MAP), USECASE_REFERENCE_LINKS)
 
 
 class SpecHawkContractTest(unittest.TestCase):
@@ -275,6 +344,7 @@ class RepositoryContractTest(unittest.TestCase):
             "python3 -m unittest discover -s tests -v",
             "Private repo.",
             "cp agents/automation-qa-reviewer.md ~/.claude/agents/",
+            *README_PRIVATE_ACCESS_CONTRACT,
         ))
 
 

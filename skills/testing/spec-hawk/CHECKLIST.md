@@ -1,7 +1,9 @@
 # Spec Hawk — Review Checklist (inline-fallback copy)
 
-Used by SKILL.md Step 2b when the `automation-qa-reviewer` agent is not installed.
-**Mirrored from `agents/automation-qa-reviewer.md` — keep the two in sync.**
+Used by SKILL.md Step 2 when the dedicated reviewer is unavailable.
+**Keep the marked contract exactly synchronized with `agents/automation-qa-reviewer.md`; each artifact is independently installable.**
+
+<!-- BEGIN SHARED REVIEW CONTRACT -->
 
 ## Discovery before review
 
@@ -10,7 +12,7 @@ Repo-agnostic: do not assume folder names, tag names, shared-package names, or c
 1. Read `package.json` — project name, test runner, schema lib (Zod/Yup/etc.), any in-house shared package.
 2. Find the config/constants module (e.g. `globalVariables.ts`, `config/`, `constants.ts`) — how env values, base URLs, and test-management IDs (TestRail section IDs, etc.) are sourced.
 3. If present, read the linter config (`biome.json`, `.eslintrc*`) and root `CLAUDE.md` / `README` for repo conventions.
-4. `Glob` the test layout — commonly `testCases/` (or `tests/`, `e2e/`) for specs and a `supports/` (or `helpers/`, `lib/`) area split into services / models / utils. Learn the repo's actual names; the checklist uses common names as examples only.
+4. Search file paths to confirm the test layout — commonly `testCases/` (or `tests/`, `e2e/`) for specs and a `supports/` (or `helpers/`, `lib/`) area split into services / models / utils. Learn the repo's actual names; the checklist uses common names as examples only.
 
 Ground every finding in the repo's actual conventions, not in these examples.
 
@@ -54,8 +56,8 @@ Each finding must include the relevant checklist number. Where an item names a s
 - Reader test: a teammate seeing only the test title in a CI report should know *what endpoint, what outcome, and under what condition*.
 
 ### 7. Duplication & reuse opportunities
-- For each helper / inline logic in the target, `Grep` sibling files under the services / utils / models layers for similar implementations.
-- Also check whether the repo's shared package already exports the same thing (`Grep` against its `node_modules/<package>/` if present).
+- For each helper / inline logic in the target, search sibling files under the services / utils / models layers for similar implementations.
+- Also check whether the repo's shared package already exports the same thing (search its `node_modules/<package>/` if present).
 - Watch especially for: HTTP request boilerplate, decimal math, db/cache access, schema/type definitions duplicated across models.
 - Report as: `"Function X here duplicates <path>:<line>. Suggest reuse via …"`.
 
@@ -78,7 +80,7 @@ These findings typically land at **MEDIUM** (refactor needed for maintainability
 Checks whether the config runs multiple workers or `fullyParallel: true` — if so, tests in different files can execute concurrently and collide on shared external state (DB rows, wallet addresses, merchant IDs, emails). This class of bug is invisible in a single-test run and only shows up under full-suite/regression runs — "passes alone, flakes in CI" is the signature symptom. Do not wave this off as flakiness; trace it to a concrete collision before dismissing it.
 
 - Check the runner config (`playwright.config.ts` or equivalent) for `fullyParallel: true` or `workers > 1`. If the suite is forced fully serial (`workers: 1`, no `fullyParallel`), this check is low-priority — note it and move on.
-- Otherwise, `Grep` across all spec files in the reviewed folder (and, budget permitting, the wider `testCases/` tree) for the same hardcoded literal used as the *target of a create/update/delete* — a fixed env var (`ENV.WALLET_ADDRESS_*`, `ENV.MERCHANT_ID_*`), a literal address/email/ID, or a fixture field reused as a unique key.
+- Otherwise, search across all spec files in the reviewed folder (and, budget permitting, the wider `testCases/` tree) for the same hardcoded literal used as the *target of a create/update/delete* — a fixed env var (`ENV.WALLET_ADDRESS_*`, `ENV.MERCHANT_ID_*`), a literal address/email/ID, or a fixture field reused as a unique key.
 - Flag when the same literal appears in **two or more spec files** AND at least one of those tests creates, deletes, or mutates the record behind it (`afterEach`/`afterAll` cleanup, a duplicate-detection test doing create-then-create-again, an update-then-verify sequence). Two workers touching the same identifier concurrently is a real race, not a hypothetical — flag it even if the current diff's tests are currently green.
 - Report the exact colliding locations: every `file:line` where the literal is used to create/mutate, so the user can see the collision pair, not just one side.
 - Suggested fix: give each spec file (or each test that persists data) its own dedicated identifier/address/ID pulled from config, so no two concurrently-runnable tests target the same external record. Cross-file serialization (`test.describe.configure({ mode: "serial" })` is file-scoped only) is a fallback, not the first suggestion — it slows the whole suite down for one collision.
@@ -123,3 +125,5 @@ Return exactly one markdown report with this structure. Omit any severity sectio
 ### NIT
 - ...
 ````
+
+<!-- END SHARED REVIEW CONTRACT -->

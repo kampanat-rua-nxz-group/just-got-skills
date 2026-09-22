@@ -256,5 +256,20 @@ class SpecHawkContractTest(unittest.TestCase):
         ))
 
 
+class RepositoryContractTest(unittest.TestCase):
+    README = ROOT / "README.md"
+    SKILLS = ("spec-hawk", "usecase-map", "create-bug-ticket", "gcm", "draft-pr")
+
+    def test_readme_documents_catalog_installation_and_validation(self):
+        readme = self.README.read_text(encoding="utf-8")
+        assert_contains_all(readme, self.SKILLS)
+        assert_contains_all(readme, (
+            "python3 scripts/validate_skills.py .",
+            "python3 -m unittest discover -s tests -v",
+            "Private repo.",
+            "cp agents/automation-qa-reviewer.md ~/.claude/agents/",
+        ))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 # Just Got Skills
 
-Agent skills loaded by [Claude Code](https://claude.com/claude-code) — QA-lead tooling by Got.Kampanat for everyday QA life.
+Agent skills for compatible runtimes, including [Claude Code](https://claude.com/claude-code) — QA-lead tooling by Got.Kampanat for everyday QA life.
 
 ## Layout
 
@@ -59,3 +59,12 @@ ln -s ~/just-got-skills/skills/dev/draft-pr              ~/.claude/skills/draft-
 
 - **[gcm](./skills/dev/gcm/SKILL.md)** — Conventional Commit messages from the working-tree diff; detects mixed concerns and emits a split-commit plan, warns on likely secrets/PII. Copy-paste text only, never runs git. `/gcm`.
 - **[draft-pr](./skills/dev/draft-pr/SKILL.md)** — PR title + description (Summary, Test plan) from the diff between the current branch and its base branch, using the repo's real test commands. Copy-paste text only, never runs git or `gh pr create`. `/draft-pr`.
+
+## Validate
+
+```bash
+python3 scripts/validate_skills.py .
+python3 -m unittest discover -s tests -v
+```
+
+The first command checks skill packaging and links. The second protects behavior contracts and the XMind renderer.

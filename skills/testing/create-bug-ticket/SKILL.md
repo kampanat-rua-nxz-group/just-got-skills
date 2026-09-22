@@ -1,63 +1,57 @@
 ---
 name: create-bug-ticket
-description: >
-  Write developer-ready Jira bug tickets from any QA input — text, screenshot,
-  API response, DevTools output, or automation failure. Use when the user wants
-  to document a bug, file a defect, write a bug report, create a Jira ticket,
-  or report an issue found during testing or production monitoring.
+description: Use when the user wants to document or file a defect from QA evidence such as text, screenshots, API responses, DevTools output, automation failures, or production monitoring.
 ---
 
 # Create Bug Ticket
 
-Produce a Jira bug ticket clear enough that any developer can reproduce and fix
-the bug without follow-up.
+Produce a developer-ready English Jira bug ticket that a developer can reproduce and fix without follow-up.
 
 ## Workflow
 
 **Step 0 — Classify the source:**
-- Screenshot / API response / DevTools / manual note → evidence is already in hand; go to Step 1.
-- **Local automation test failure** → reproduce and confirm first (Step 0a).
 
-**Step 0a — Reproduce & confirm (automation only):**
+- Text, screenshot, API response, DevTools output, or manual note: evidence is available; continue to Step 1.
+- Local automation test failure: confirm it through Step 0a before drafting.
+
+**Step 0a — Confirm an automation-sourced defect:**
+
 Invoke `debug-mantra`, then:
-1. Run the failing test; capture the actual error/stack **verbatim**.
-2. Determine determinism — always vs intermittent (record rate for Frequency field).
-3. Localize: product code vs test code.
 
-Only a confirmed **product defect** continues to Step 1.
-Flaky / selector / test-data / stale-assertion failures are test fixes — say so and stop.
-See REFERENCE.md → Automation-sourced Bugs for triage table.
+1. Run the failing test and capture the actual error or stack verbatim.
+2. Record whether it is deterministic or intermittent; include the observed rate in Frequency.
+3. Localize the failure to product code or test code.
 
-**Step 1 — Extract; ask only for what is genuinely missing:**
-- Feature / page affected, actual vs expected behavior
-- Environment (Staging / Production / Dev / UAT), Severity, Frequency
-- If severity or environment is unclear → ask before writing
-- Clear screenshot → infer as much as possible
+Continue only with a confirmed product defect. Flaky / selector / test-data / stale-assertion failures are test fixes — say so and stop. Use `REFERENCE.md` → **Automation-sourced Bugs** for the triage table and confirmation criteria.
 
-**Step 2 — Write the ticket in English using this structure:**
+**Step 1 — Extract facts and resolve required gaps:**
+
+- Capture the affected feature or page, actual and expected behavior, environment, severity, and frequency.
+- Ask only for genuinely missing facts; ask for an unclear severity or environment before drafting. Infer every supported fact from clear screenshots or other evidence.
+
+**Step 2 — Write the ticket in this ten-section structure:**
 
 1. **Title** — `[Exact Feature/Page/Endpoint] Short specific summary`
    - FE: `[Portfolio Overview - Filter Dropdown] Selected filter resets on page refresh`
    - BE: `[GET /api/v1/portfolio/summary] Returns stale data when coin filter is changed`
-   - Never use generic tags like `[UI]` `[API]` `[Backend]`
+   - Use an exact feature, page, or endpoint tag; `[UI]`, `[API]`, and `[Backend]` need an exact replacement.
 
-2. **Environment** — FE table or BE table (see REFERENCE.md)
+2. **Environment** — use the FE or BE table in `REFERENCE.md` → **Environment Tables**.
 
-3. **Description** — 2–4 sentences: what feature, what is broken, evidence/scope
+3. **Description** — 2–4 sentences covering the feature, failure, evidence, and scope.
 
-4. **Steps to Reproduce** — numbered; reproducible by anyone with zero prior context
+4. **Steps to Reproduce** — numbered steps that anyone can follow with zero prior context.
 
-5. **Expected Result** — specific; reference field names / endpoints where relevant
+5. **Expected Result** — state the expected behavior and relevant field names or endpoints.
 
-6. **Actual Result** — exact errors quoted, API calls observed or not, silent failures noted
+6. **Actual Result** — include exact errors, observed API calls, and silent failures.
 
-7. **Impact / Severity** — table format (see REFERENCE.md for severity guidelines)
+7. **Impact / Severity** — use the table and severity guidance in `REFERENCE.md` → **Severity Selection**.
 
-8. **Root Cause** — confirmed or suspected; identify layer and specific detail; suggest fix
-   - Use "likely" / "possibly" for suspected causes
+8. **Root Cause** — state a confirmed or suspected layer, specific detail, and suggested fix; use `likely` or `possibly` for a hypothesis. Select the issue type with `REFERENCE.md` → **Issue Type Definitions**.
 
-9. **Attachments** — table of all evidence; if none: "No attachments provided. QA to attach before filing."
+9. **Attachments** — table every piece of evidence; otherwise write: `No attachments provided. QA to attach before filing.`
 
-10. **QA Note** — `> 💡 **QA Note:**` block with regression scenarios, edge cases, related components
+10. **QA Note** — a `> 💡 **QA Note:**` block covering regression scenarios, edge cases, and related components.
 
-Before presenting, run the quality checklist in REFERENCE.md.
+Before presenting, apply `REFERENCE.md` → **Tone Contract** and complete its **Quality Checklist**.

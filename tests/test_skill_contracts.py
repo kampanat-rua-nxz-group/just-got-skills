@@ -5,6 +5,8 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 DRAFT_PR = ROOT / "skills/dev/draft-pr/SKILL.md"
 GCM = ROOT / "skills/dev/gcm/SKILL.md"
+BUG_TICKET = ROOT / "skills/testing/create-bug-ticket/SKILL.md"
+BUG_TICKET_REFERENCE = ROOT / "skills/testing/create-bug-ticket/REFERENCE.md"
 
 DRAFT_PR_CONTRACT = (
     "gh pr create",
@@ -25,6 +27,35 @@ GCM_CONTRACT = (
     "git diff --staged",
     "Diff may contain a secret/PII",
     "Run tests/typecheck before committing",
+)
+
+BUG_TICKET_DESCRIPTION = (
+    "Use when the user wants to document or file a defect from QA evidence "
+    "such as text, screenshots, API responses, DevTools output, automation "
+    "failures, or production monitoring."
+)
+
+BUG_TICKET_SECTIONS = (
+    "Title",
+    "Environment",
+    "Description",
+    "Steps to Reproduce",
+    "Expected Result",
+    "Actual Result",
+    "Impact / Severity",
+    "Root Cause",
+    "Attachments",
+    "QA Note",
+)
+
+BUG_TICKET_CONTRACT = (
+    "Jira bug ticket",
+    "debug-mantra",
+    "Flaky / selector / test-data / stale-assertion failures are test fixes",
+    "FE Bug",
+    "BE Bug",
+    "Critical / High / Medium / Low",
+    "## Quality Checklist",
 )
 
 
@@ -69,6 +100,16 @@ class DevSkillContractTest(unittest.TestCase):
             self.assertNotIn("Summary + Test plan", description)
             self.assertNotIn("split-commit plan", description)
             self.assertNotIn("copy-paste text", description)
+
+
+class BugTicketContractTest(unittest.TestCase):
+    def test_description_is_a_compact_evidence_trigger(self):
+        self.assertEqual(frontmatter(BUG_TICKET)["description"], BUG_TICKET_DESCRIPTION)
+
+    def test_jira_template_and_triage_contract_are_preserved(self):
+        ticket_contract = body(BUG_TICKET) + BUG_TICKET_REFERENCE.read_text(encoding="utf-8")
+        assert_contains_all(ticket_contract, BUG_TICKET_SECTIONS)
+        assert_contains_all(ticket_contract, BUG_TICKET_CONTRACT)
 
 
 if __name__ == "__main__":

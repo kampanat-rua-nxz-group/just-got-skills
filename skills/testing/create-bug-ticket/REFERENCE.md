@@ -1,7 +1,7 @@
 # Create Bug Ticket — Reference
 
-Use this file for environment table formats, severity guidelines,
-Issue Type definitions, tone rules, and the quality checklist.
+Use this file for the environment tables, severity selection, issue types,
+ticket tone, and final quality check referenced by `SKILL.md`.
 
 ---
 
@@ -38,7 +38,7 @@ Issue Type definitions, tone rules, and the quality checklist.
 
 ---
 
-## Impact / Severity Table
+## Severity Selection
 
 | Field | Detail |
 |---|---|
@@ -112,18 +112,16 @@ Reproduce and confirm (see `debug-mantra`), then triage:
 
 ---
 
-## Tone and Style Rules
+## Tone Contract
 
-- **Always write in English** — regardless of input language
-- **Two audiences simultaneously:**
-  - Non-technical (PO/PM): Description and Impact — plain language, what broke and why it matters
-  - Technical (Dev/QA): Steps, Root Cause, Actual Result — exact endpoints, field names, HTTP methods, error codes
-- Write in **third person** ("The chart renders..." not "I saw the chart render...")
-- Never use vague language like "something is wrong" or "it doesn't work properly"
-- Steps to Reproduce must be reproducible by anyone with zero prior context
-- Confirmed root cause → state with confidence; suspected → use "likely", "possibly", "may be caused by"
-- Always quantify scope — not "users are affected"; say "all users accessing via direct link"
-- If the same root cause pattern appears repeatedly → call it out and recommend a process fix
+- Write in English for two audiences:
+  - Non-technical (PO/PM): Description and Impact explain what broke and why it matters in plain language.
+  - Technical (Dev/QA): Steps, Root Cause, and Actual Result include exact endpoints, field names, HTTP methods, and error codes.
+- Use third person ("The chart renders...") and concrete behavior instead of vague claims.
+- Make Steps to Reproduce reproducible by anyone with zero prior context.
+- State confirmed root causes with confidence; mark hypotheses with "likely", "possibly", or "may be caused by".
+- Quantify scope, for example "all users accessing via direct link."
+- Call out recurring root-cause patterns and recommend a process fix.
 
 ---
 

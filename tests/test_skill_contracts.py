@@ -258,11 +258,18 @@ class SpecHawkContractTest(unittest.TestCase):
 
 class RepositoryContractTest(unittest.TestCase):
     README = ROOT / "README.md"
-    SKILLS = ("spec-hawk", "usecase-map", "create-bug-ticket", "gcm", "draft-pr")
+    SKILL_LINKS = (
+        "[spec-hawk](./skills/testing/spec-hawk/SKILL.md)",
+        "[usecase-map](./skills/testing/usecase-map/SKILL.md)",
+        "[create-bug-ticket](./skills/testing/create-bug-ticket/SKILL.md)",
+        "[gcm](./skills/dev/gcm/SKILL.md)",
+        "[draft-pr](./skills/dev/draft-pr/SKILL.md)",
+    )
 
     def test_readme_documents_catalog_installation_and_validation(self):
         readme = self.README.read_text(encoding="utf-8")
-        assert_contains_all(readme, self.SKILLS)
+        reference = readme.split("## Reference", 1)[1]
+        assert_contains_all(reference, self.SKILL_LINKS)
         assert_contains_all(readme, (
             "python3 scripts/validate_skills.py .",
             "python3 -m unittest discover -s tests -v",

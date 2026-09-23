@@ -87,9 +87,9 @@ class SkillRepositoryValidationTest(unittest.TestCase):
             errors = "\n".join(validate_repository(root))
             self.assertIn("missing closing frontmatter boundary", errors)
 
-    def test_current_repository_has_five_discoverable_skills(self):
+    def test_current_repository_has_six_discoverable_skills(self):
         skill_files = sorted(ROOT.glob("skills/*/*/SKILL.md"))
-        self.assertEqual(5, len(skill_files))
+        self.assertEqual(6, len(skill_files))
 
 
 if __name__ == "__main__":

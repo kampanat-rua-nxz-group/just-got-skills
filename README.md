@@ -37,6 +37,7 @@ ln -s ~/just-got-skills/skills/testing/usecase-map       ~/.claude/skills/usecas
 ln -s ~/just-got-skills/skills/testing/create-bug-ticket ~/.claude/skills/create-bug-ticket
 ln -s ~/just-got-skills/skills/dev/gcm                   ~/.claude/skills/gcm
 ln -s ~/just-got-skills/skills/dev/draft-pr              ~/.claude/skills/draft-pr
+ln -s ~/just-got-skills/skills/dev/create-jira-story-task ~/.claude/skills/create-jira-story-task
 ```
 
 `git pull` in `~/just-got-skills` then updates every linked skill in place.
@@ -59,6 +60,7 @@ ln -s ~/just-got-skills/skills/dev/draft-pr              ~/.claude/skills/draft-
 
 - **[gcm](./skills/dev/gcm/SKILL.md)** — Conventional Commit messages from the working-tree diff; detects mixed concerns and emits a split-commit plan, warns on likely secrets/PII. Copy-paste text only, never runs git. `/gcm`.
 - **[draft-pr](./skills/dev/draft-pr/SKILL.md)** — PR title + description (Summary, Test plan) from the diff between the current branch and its base branch, using the repo's real test commands. Copy-paste text only, never runs git or `gh pr create`. `/draft-pr`.
+- **[create-jira-story-task](./skills/dev/create-jira-story-task/SKILL.md)** — Copy-ready non-defect Jira Stories and Tasks with required requirements fields, testable acceptance criteria, and explicit unresolved questions.
 
 ## Validate
 

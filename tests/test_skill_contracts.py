@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DRAFT_PR = ROOT / "skills/dev/draft-pr/SKILL.md"
 GCM = ROOT / "skills/dev/gcm/SKILL.md"
 GCM_REFERENCE = ROOT / "skills/dev/gcm/REFERENCE.md"
+JIRA_STORY_TASK = ROOT / "skills/dev/create-jira-story-task/SKILL.md"
 BUG_TICKET = ROOT / "skills/testing/create-bug-ticket/SKILL.md"
 BUG_TICKET_REFERENCE = ROOT / "skills/testing/create-bug-ticket/REFERENCE.md"
 USECASE_MAP = ROOT / "skills/testing/usecase-map/SKILL.md"
@@ -155,6 +156,52 @@ class DevSkillContractTest(unittest.TestCase):
             self.assertNotIn("Summary + Test plan", description)
             self.assertNotIn("split-commit plan", description)
             self.assertNotIn("copy-paste text", description)
+
+
+class JiraStoryTaskContractTest(unittest.TestCase):
+    REQUIRED_FIELDS = (
+        "## Title",
+        "## Description",
+        "## Background",
+        "## Business Rules",
+        "## User Story / Details",
+        "## Acceptance Criteria",
+    )
+    OPTIONAL_FIELDS = (
+        "## Impact",
+        "## Dependencies",
+        "## Notes",
+        "## Open Questions",
+        "## Test Scenarios",
+    )
+
+    def setUp(self):
+        self.assertTrue(JIRA_STORY_TASK.exists(), "Jira Story/Task skill is missing")
+
+    def test_description_routes_non_defect_jira_work(self):
+        description = frontmatter(JIRA_STORY_TASK)["description"]
+        self.assertTrue(description.startswith("Use when"))
+        self.assertIn("Jira", description)
+        self.assertIn("Story", description)
+        self.assertIn("Task", description)
+
+    def test_skill_preserves_required_and_optional_field_contract(self):
+        entrypoint = body(JIRA_STORY_TASK)
+        assert_contains_all(entrypoint, self.REQUIRED_FIELDS)
+        assert_contains_all(entrypoint, self.OPTIONAL_FIELDS)
+        fields = self.REQUIRED_FIELDS + self.OPTIONAL_FIELDS
+        positions = [entrypoint.index(field) for field in fields]
+        self.assertEqual(positions, sorted(positions))
+
+    def test_skill_classifies_work_and_routes_defects(self):
+        entrypoint = body(JIRA_STORY_TASK)
+        assert_contains_all(entrypoint, (
+            "Story",
+            "Task",
+            "create-bug-ticket",
+            "TBD",
+            "copy-ready",
+        ))
 
 
 class BugTicketContractTest(unittest.TestCase):
@@ -333,6 +380,7 @@ class RepositoryContractTest(unittest.TestCase):
         "[create-bug-ticket](./skills/testing/create-bug-ticket/SKILL.md)",
         "[gcm](./skills/dev/gcm/SKILL.md)",
         "[draft-pr](./skills/dev/draft-pr/SKILL.md)",
+        "[create-jira-story-task](./skills/dev/create-jira-story-task/SKILL.md)",
     )
 
     def test_readme_documents_catalog_installation_and_validation(self):

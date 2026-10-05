@@ -22,6 +22,13 @@ DRAFT_PR_CONTRACT = (
     "git diff",
 )
 
+DRAFT_PR_TEMPLATE_CONTRACT = (
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    "git show <branch>:.github/PULL_REQUEST_TEMPLATE.md",
+    "**repo template**",
+    "**skill template**",
+)
+
 GCM_CONTRACT = (
     "git status --short",
     "git diff --staged",
@@ -128,6 +135,9 @@ def assert_contains_all(text: str, fragments: tuple[str, ...]) -> None:
 class DevSkillContractTest(unittest.TestCase):
     def test_draft_pr_preserves_command_contract(self):
         assert_contains_all(body(DRAFT_PR), DRAFT_PR_CONTRACT)
+
+    def test_draft_pr_prefers_repository_pr_template(self):
+        assert_contains_all(body(DRAFT_PR), DRAFT_PR_TEMPLATE_CONTRACT)
 
     def test_gcm_preserves_command_contract(self):
         assert_contains_all(body(GCM), GCM_CONTRACT)

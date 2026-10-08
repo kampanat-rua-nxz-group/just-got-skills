@@ -19,7 +19,10 @@ Out of scope: amend, rebase, hook fixes. Wording and staging plans only.
 
 ## Output format
 
-English, Conventional Commits (commitlint `config-conventional`), subject + body bullets when the change spans multiple files. Enforce:
+English, Conventional Commits (commitlint `config-conventional`), in caveman style: short,
+plain, direct phrases. Use a concrete verb and object; drop filler words and articles when
+meaning stays clear. Keep exact code identifiers when needed. Body bullets use the same style.
+Add body bullets when the change spans multiple files. Enforce:
 
 - **Every line ≤ 100 chars** — the whole message: the `type(scope): subject` header and each body/footer line. Tighten wording, push detail to bullets, or wrap long bullets across lines; never exceed.
 - **Subject** lowercase start (no sentence/start/pascal/upper case), **no trailing period**.
@@ -32,7 +35,7 @@ Emit runnable lines only — the `git commit -m` args *are* the message, so don'
 
 ```
 git add path/to/file.ts
-git commit -m "fix: handle null card ID in auth middleware" -m "- guard undefined debCardId before hashing" -m "- add fallback when CON_CODE is missing"
+git commit -m "fix: stop auth crash on missing card ID" -m "- guard missing debCardId" -m "- handle missing CON_CODE"
 ```
 
 ### Split plan (multiple concerns)

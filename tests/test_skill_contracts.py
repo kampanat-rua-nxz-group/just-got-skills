@@ -153,7 +153,7 @@ class DevSkillContractTest(unittest.TestCase):
         self.assertEqual(prompt_order, sorted(prompt_order))
         staged_verification = reference.index("# 1b. verify what got staged")
         staged_diff = reference.index("git diff --staged", staged_verification)
-        commit = reference.index("git commit -m \"fix(auth): guard null card ID before hashing\"")
+        commit = reference.index("git commit -m \"fix(auth): guard missing card ID\"")
         self.assertLess(staged_verification, staged_diff)
         self.assertLess(staged_diff, commit)
 

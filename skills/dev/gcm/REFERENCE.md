@@ -88,7 +88,7 @@ git add -p src/auth.ts
 git diff --staged
 
 # 1c.
-git commit -m "fix(auth): guard null card ID before hashing" -m "- ..."
+git commit -m "fix(auth): guard missing card ID" -m "- ..."
 ```
 
 | Key | Meaning |

@@ -62,7 +62,7 @@ ln -s ~/just-got-skills/skills/dev/create-jira-story-task ~/.claude/skills/creat
 
 ### Dev
 
-- **[gcm](./skills/dev/gcm/SKILL.md)** — Conventional Commit messages from the working-tree diff; detects mixed concerns and emits a split-commit plan, warns on likely secrets/PII. Copy-paste text only, never runs git. `/gcm`.
+- **[gcm](./skills/dev/gcm/SKILL.md)** — Caveman-style Conventional Commit messages from the working-tree diff; detects mixed concerns and emits a split-commit plan, warns on likely secrets/PII. Copy-paste text only, never runs git. `/gcm`.
 - **[draft-pr](./skills/dev/draft-pr/SKILL.md)** — PR title + description from the diff between the current branch and its base branch, using the repo's real test commands. Follows the repo's `.github/PULL_REQUEST_TEMPLATE.md` when present, otherwise Summary + Test plan. Copy-paste text only, never runs git or `gh pr create`. `/draft-pr`.
 - **[create-jira-story-task](./skills/dev/create-jira-story-task/SKILL.md)** — Copy-ready non-defect Jira Stories and Tasks with required requirements fields, testable acceptance criteria, and explicit unresolved questions.
 

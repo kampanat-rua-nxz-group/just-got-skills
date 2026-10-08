@@ -67,6 +67,21 @@ class Md2XmindTest(unittest.TestCase):
             ["first", "second"],
         )
 
+    def test_markdown_bold_highlights_outline_only(self):
+        root = md2xmind.parse_outline("""# Transfers
+## Business Scenarios
+- **Balance insufficient**
+  - HTTP Status 422
+""")
+
+        scenario = root.children[0].children[0]
+        self.assertEqual(scenario.title, "Balance insufficient")
+        self.assertEqual(scenario.markers, [])
+        content = json.loads(md2xmind.build_content_json(root))
+        rendered = content[0]["rootTopic"]["children"]["attached"][0]["children"]["attached"][0]
+        self.assertEqual(rendered["title"], "Balance insufficient")
+        self.assertNotIn("markers", rendered)
+
     def test_write_xmind_serializes_native_archive_content(self):
         root = md2xmind.parse_outline(VALID_OUTLINE)
         content = md2xmind.build_content_json(root)

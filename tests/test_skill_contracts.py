@@ -246,7 +246,8 @@ class UsecaseMapContractTest(unittest.TestCase):
         "### 1. Validation Cases",
         "### 2. Business Scenarios (gated decision tree)",
         "### 3. Cross-cutting (Security & Edge)",
-        "### 4. Coverage Gaps",
+        "### 4. Open Questions / Notes",
+        "### 5. Coverage Gaps",
     )
     GATES = (
         "Service reachable?",
@@ -255,10 +256,9 @@ class UsecaseMapContractTest(unittest.TestCase):
         "Authorized?",
         "Business rules",
         "Resource/state",
-        "→ Success",
     )
     COVERAGE_GAPS = (
-        "`@blocked-tbd` / `TBD` forks",
+        "`@TBD` / `TBD` forks",
         "Skipped gates",
         "Continuation with no fail fork",
     )
@@ -266,7 +266,7 @@ class UsecaseMapContractTest(unittest.TestCase):
         "`@mock-only`",
         "`@nondeterministic`",
         "`@manual`",
-        "`@blocked-tbd`",
+        "`@TBD`",
     )
 
     def test_description_is_trigger_focused_and_runtime_neutral(self):
@@ -296,6 +296,21 @@ class UsecaseMapContractTest(unittest.TestCase):
 
     def test_entrypoint_links_annotated_example_and_operational_notes(self):
         assert_contains_all(body(USECASE_MAP), USECASE_REFERENCE_LINKS)
+
+    def test_business_success_result_is_a_leaf_of_the_final_passing_condition(self):
+        entrypoint = body(USECASE_MAP)
+        reference = (ROOT / "skills/testing/usecase-map/REFERENCE.md").read_text(encoding="utf-8")
+        self.assertNotIn("- → Success", entrypoint)
+        self.assertNotIn("- → Success", reference)
+        self.assertIn("- Balance sufficient\n            - HTTP Status 200", reference)
+
+    def test_outline_highlights_scenario_conditions_with_markdown_bold(self):
+        entrypoint = body(USECASE_MAP)
+        reference = (ROOT / "skills/testing/usecase-map/REFERENCE.md").read_text(encoding="utf-8")
+        self.assertIn("`**text**` → highlight a scenario condition", entrypoint)
+        self.assertIn("- **Insufficient balance**", reference)
+        self.assertNotIn("[!]", entrypoint)
+        self.assertNotIn("[!]", reference)
 
 
 class SpecHawkContractTest(unittest.TestCase):

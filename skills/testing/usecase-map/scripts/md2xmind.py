@@ -9,7 +9,8 @@ Outline conventions:
     ## / ### Heading   branch topics (heading depth = tree depth)
     - Topic text       topic; nesting via 2-space indentation
     > note text        attaches a plain note to the preceding topic
-    [!]                exclamation marker
+    **text**           emphasis in Markdown only (plain XMind title)
+    [!]                legacy exclamation marker
     [P1]..[P3]         priority marker token in a title (stripped)
     @label             label token in a title (stripped)
 
@@ -25,14 +26,18 @@ import uuid
 import zipfile
 
 MARKER_RE = re.compile(r"\[P([1-9])\]")
-EXCLAM_RE = re.compile(r"\[!\]")
 LABEL_RE = re.compile(r"@([\w-]+)")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 BULLET_RE = re.compile(r"^(\s*)-\s+(.*)$")
 NOTE_RE = re.compile(r"^\s*>\s?(.*)$")
+SPACE_RE = re.compile(r"\s{2,}")
+BREAK_RE = re.compile(r"\s*<br>\s*")
+BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
 
 
 class Topic:
+    __slots__ = ("title", "note_lines", "markers", "labels", "children")
+
     def __init__(self, title):
         self.title = title
         self.note_lines = []
@@ -43,16 +48,22 @@ class Topic:
     @classmethod
     def from_text(cls, text):
         """Build a Topic from raw title text, extracting [Pn] and @label tokens."""
-        markers = [f"priority-{m}" for m in MARKER_RE.findall(text)]
-        text = MARKER_RE.sub("", text)
-        if EXCLAM_RE.search(text):
+        markers = []
+        if "[P" in text:
+            markers = [f"priority-{m}" for m in MARKER_RE.findall(text)]
+            text = MARKER_RE.sub("", text)
+        if "[!]" in text:
             markers.append("symbol-exclam")
-            text = EXCLAM_RE.sub("", text)
-        labels = LABEL_RE.findall(text)
-        text = LABEL_RE.sub("", text)
-        title = re.sub(r"\s{2,}", " ", text).strip()
+            text = text.replace("[!]", "")
+        labels = []
+        if "@" in text:
+            labels = LABEL_RE.findall(text)
+            text = LABEL_RE.sub("", text)
+        text = BOLD_RE.sub(r"\1", text)
+        title = SPACE_RE.sub(" ", text).strip()
         # <br> token → real newline (multi-line topic titles)
-        title = re.sub(r"\s*<br>\s*", "\n", title)
+        if "<br>" in title:
+            title = BREAK_RE.sub("\n", title)
         if not title:
             raise ValueError(f"Topic with empty title after token stripping: {text!r}")
         topic = cls(title)
@@ -175,7 +186,7 @@ def build_content_json(root):
         ],
         "rootTopic": root_dict,
     }
-    return json.dumps([sheet], ensure_ascii=False)
+    return json.dumps([sheet], ensure_ascii=False, separators=(",", ":"))
 
 
 METADATA_JSON = json.dumps({
@@ -204,7 +215,8 @@ def write_xmind(content_json, out_path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    description = (__doc__ or "Convert a Markdown outline to an XMind file.").splitlines()[0]
+    parser = argparse.ArgumentParser(description=description)
     parser.add_argument("outline", help="Markdown outline file")
     parser.add_argument("-o", "--output", required=True, help="Output .xmind path")
     args = parser.parse_args()

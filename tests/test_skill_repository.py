@@ -89,7 +89,7 @@ class SkillRepositoryValidationTest(unittest.TestCase):
 
     def test_current_repository_has_six_discoverable_skills(self):
         skill_files = sorted(ROOT.glob("skills/*/*/SKILL.md"))
-        self.assertEqual(6, len(skill_files))
+        self.assertEqual(7, len(skill_files))
 
 
 if __name__ == "__main__":

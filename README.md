@@ -33,6 +33,7 @@ Over HTTPS instead: `GITHUB_TOKEN=ghp_xxx npx skills add kampanat-rua-nxz-group/
 ```bash
 git clone git@github.com:kampanat-rua-nxz-group/just-got-skills.git ~/just-got-skills
 ln -s ~/just-got-skills/skills/testing/spec-hawk         ~/.claude/skills/spec-hawk
+ln -s ~/just-got-skills/skills/testing/spec-to-qa        ~/.claude/skills/spec-to-qa
 ln -s ~/just-got-skills/skills/testing/usecase-map       ~/.claude/skills/usecase-map
 ln -s ~/just-got-skills/skills/testing/create-bug-ticket ~/.claude/skills/create-bug-ticket
 ln -s ~/just-got-skills/skills/dev/gcm                   ~/.claude/skills/gcm
@@ -52,6 +53,7 @@ ln -s ~/just-got-skills/skills/dev/create-jira-story-task ~/.claude/skills/creat
 
 ### Testing
 
+- **[spec-to-qa](./skills/testing/spec-to-qa/SKILL.md)** — Derive traceable QA scenarios from product designs, API specifications, and sequence diagrams; use independent opinions or debate to examine coverage and ambiguity.
 - **[spec-hawk](./skills/testing/spec-hawk/SKILL.md)** — Severity-tagged QA review of Playwright + TypeScript automation specs (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`/`NIT`) with `file:line` citations and fix snippets. `/spec-hawk`.
 - **[usecase-map](./skills/testing/usecase-map/SKILL.md)** — QA use-case mind map (`.xmind`) from a feature, user story, or API spec: Validation, Business Scenarios, Security & Edge, Coverage Gaps. Saves a Markdown outline to the repo's `docs/testcases/` and renders the `.xmind` next to it; needs Python 3. `/usecase-map`.
 - **[create-bug-ticket](./skills/testing/create-bug-ticket/SKILL.md)** — Turn any QA input (screenshot, API response, DevTools output, automation failure) into a developer-ready Jira bug ticket.

@@ -11,7 +11,7 @@ Use these default contracts for method and path validation unless the user or su
 | Method not allowed | 405 | `{"error":{"code":"invalid_method","message":"Method not allowed"}}` |
 | Path not found | 404 | `{"error":{"code":"invalid_path","message":"Path not found"}}` |
 
-Capture the status, code and message as expected-result leaves, as in the example below. Cite this default under Open Questions / Notes when a feature document does not repeat it; the two cases are defined defaults, not `TBD` forks.
+Capture the status, code and message as leaves beneath each sample input, as in the example below. Cite this default under Open Questions / Notes when a feature document does not repeat it; the two cases are defined defaults, not `TBD` forks.
 
 ## Full Annotated Example
 
@@ -25,120 +25,127 @@ The contracts below are illustrative. This example’s `GET /ethereum/transfers`
   - Method
     - invalid method
       - Sample input: DELETE /ethereum/build-transfer
-      - HTTP Status 405
-      - error code invalid_method
-      - message "Method not allowed"
-      - error contains only code and message (no type or field)
+        - HTTP Status 405
+        - error code invalid_method
+        - message "Method not allowed"
+        - error contains only code and message (no type or field)
   - Path/Endpoint
     - invalid path
       - Sample input: POST /ethereum/build-transfer-unknown
-      - HTTP Status 404
-      - error code invalid_path
-      - message "Path not found"
-      - error contains only code and message (no type or field)
+        - HTTP Status 404
+        - error code invalid_path
+        - message "Path not found"
+        - error contains only code and message (no type or field)
   - Headers
     - content-type
       - Omit field
         - Sample input: Content-Type header omitted; otherwise valid JSON body
-        - HTTP Status 400
-        - error code LB_API_ERC_001
+          - HTTP Status 400
+          - error code LB_API_ERC_001
       - Content-Type mismatch @TBD
         - Sample input: Content-Type=text/plain or application/xml; otherwise valid JSON body
-        - HTTP Status TBD
-        - error code TBD
+          - HTTP Status TBD
+          - error code TBD
     - x-service-name
       - Omit field
         - Sample input: x-service-name header omitted; all other headers valid
-        - HTTP Status 400
-        - error code LB_API_ERC_001
+          - HTTP Status 400
+          - error code LB_API_ERC_001
   - Request body
     - from_address
       - **Omit required field**
         - Sample input: remove from_address from an otherwise valid body
-        - HTTP Status 400
-        - error code LB_API_ERC_001
+          - HTTP Status 400
+          - error code LB_API_ERC_001
       - **Address without 0x prefix**
         - Sample input: from_address="1111111111111111111111111111111111111111" or "abcdefabcdefabcdefabcdefabcdefabcdefabcd"
-        - HTTP Status 400
-        - error code LB_API_ERC_002
+          - HTTP Status 400
+          - error code LB_API_ERC_002
 
 - GET /ethereum/transfers
   - Query parameters
     - limit
       - Omit optional parameter
         - Sample input: GET /ethereum/transfers (no query string)
-        - HTTP Status 200
-        - default page limit is 20
+          - HTTP Status 200
+          - default page limit is 20
       - Empty or whitespace
         - Sample input: ?limit= or ?limit=%20 or ?limit=%20%20
-        - HTTP Status 400
-        - error code invalid_query
+          - HTTP Status 400
+          - error code invalid_query
       - Wrong type or malformed integer
         - Sample input: ?limit=abc or ?limit=1.5 or ?limit=true or ?limit=null
-        - HTTP Status 400
-        - error code invalid_query
+          - HTTP Status 400
+          - error code invalid_query
       - Below minimum
         - Sample input: ?limit=0 or ?limit=-1
-        - HTTP Status 400
-        - error code invalid_query
+          - HTTP Status 400
+          - error code invalid_query
       - Within inclusive boundaries
         - Sample input: ?limit=1 or ?limit=2 or ?limit=99 or ?limit=100
-        - HTTP Status 200
-        - returned item count does not exceed the requested limit
+          - HTTP Status 200
+          - returned item count does not exceed the requested limit
       - Above maximum
         - Sample input: ?limit=101 or ?limit=1000
-        - HTTP Status 400
-        - error code invalid_query
+          - HTTP Status 400
+          - error code invalid_query
     - status
       - Omit optional parameter
         - Sample input: ?limit=20 (status omitted)
-        - HTTP Status 200
-        - results may contain both pending and confirmed transfers
+          - HTTP Status 200
+          - results may contain both pending and confirmed transfers
       - Supported enum value
         - Sample input: ?status=pending or ?status=confirmed
-        - HTTP Status 200
-        - each returned transfer matches the requested status
+          - HTTP Status 200
+          - each returned transfer matches the requested status
       - Empty or whitespace
         - Sample input: ?status= or ?status=%20
-        - HTTP Status 400
-        - error code invalid_query
+          - HTTP Status 400
+          - error code invalid_query
       - Unsupported value or wrong type
         - Sample input: ?status=failed or ?status=123 or ?status=null
-        - HTTP Status 400
-        - error code invalid_query
+          - HTTP Status 400
+          - error code invalid_query
       - Case sensitivity undefined @TBD
         - Sample input: ?status=PENDING or ?status=Confirmed
-        - HTTP Status TBD
-        - response behavior TBD
+          - HTTP Status TBD
+          - response behavior TBD
 
 ## Business Scenarios
 - POST /ethereum/build-transfer
   - Service unavailable @edge
-    - HTTP Status 503
-    - error code LB_API_SVC_001
+    - Sample data test: service health check fails
+      - HTTP Status 503
+      - error code LB_API_SVC_001
   - Service available
     - Ethereum RPC down / timeout @edge @mock-only
-      - HTTP Status 500
-      - error code LB_API_ETH_004
+      - Sample data test: RPC request times out through toxiproxy
+        - HTTP Status 500
+        - error code LB_API_ETH_004
     - RPC available
       - Authentication failure @security
-        - HTTP Status 401
-        - error code LB_API_AUTH_001
+        - Sample data test: missing authentication credentials
+          - HTTP Status 401
+          - error code LB_API_AUTH_001
       - Authenticated
         - amount < minimum required
-          - HTTP Status 400
-          - error code LB_API_AMT_001
-          - message "amount below minimum"
+          - Sample data test: amount below documented minimum
+            - HTTP Status 400
+            - error code LB_API_AMT_001
+            - message "amount below minimum"
         - amount > maximum required
-          - HTTP Status 400
-          - error code LB_API_AMT_002
+          - Sample data test: amount above documented maximum
+            - HTTP Status 400
+            - error code LB_API_AMT_002
         - Amount within allowed range
           - **Insufficient balance**
-            - HTTP Status 422
-            - error code LB_API_BAL_001
+            - Sample data test: balance below requested amount
+              - HTTP Status 422
+              - error code LB_API_BAL_001
           - Balance sufficient
-            - HTTP Status 200
-            - calldata decodes to requested transfer args
+            - Sample data test: sufficient balance for transfer
+              - HTTP Status 200
+              - calldata decodes to requested transfer args
 
 ## Cross-cutting (Security & Edge)
 - Security
@@ -146,7 +153,8 @@ The contracts below are illustrative. This example’s `GET /ethereum/transfers`
   - Oversized payload @security
 - Edge Cases
   - **Concurrent broadcast race**
-    - exactly one on-chain transaction
+    - Sample data test: submit two simultaneous identical broadcasts
+      - exactly one on-chain transaction
 
 ## Open Questions / Notes
 - POST /ethereum/build-transfer

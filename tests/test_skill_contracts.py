@@ -297,12 +297,14 @@ class UsecaseMapContractTest(unittest.TestCase):
     def test_entrypoint_links_annotated_example_and_operational_notes(self):
         assert_contains_all(body(USECASE_MAP), USECASE_REFERENCE_LINKS)
 
-    def test_business_success_result_is_a_leaf_of_the_final_passing_condition(self):
+    def test_expected_results_are_children_of_sample_input_or_data(self):
         entrypoint = body(USECASE_MAP)
         reference = (ROOT / "skills/testing/usecase-map/REFERENCE.md").read_text(encoding="utf-8")
         self.assertNotIn("- → Success", entrypoint)
         self.assertNotIn("- → Success", reference)
-        self.assertIn("- Balance sufficient\n            - HTTP Status 200", reference)
+        self.assertIn("- Balance sufficient\n            - Sample data test:", reference)
+        self.assertIn("- Sample input: DELETE /ethereum/build-transfer\n        - HTTP Status 405", reference)
+        self.assertIn("- Sample data test: sufficient balance for transfer\n              - HTTP Status 200", reference)
 
     def test_outline_highlights_scenario_conditions_with_markdown_bold(self):
         entrypoint = body(USECASE_MAP)

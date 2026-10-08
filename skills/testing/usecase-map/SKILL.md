@@ -11,7 +11,7 @@ Turn feature requirements into a QA use-case mind map: the agent writes a Markdo
 ## Workflow
 
 1. **Gather context** — read the feature description, user story, acceptance criteria, spec, and design doc, including error codes, messages, and limits. Ask only when ambiguity prevents mapping; handle undocumented values as described below.
-2. **Build the map** using the taxonomy below. End every scenario with expected-result leaves; bold scenario conditions that need attention in the Markdown outline.
+2. **Build the map** using the taxonomy below. Put expected-result leaves under each sample input/data test; bold scenario conditions that need attention in the Markdown outline.
 3. **Review coverage** and populate Coverage Gaps from the completed trees.
 4. **Save the outline** as plain Markdown at `docs/testcases/<feature>-usecase-map.md` in the project repo. Create the directory if needed; omit frontmatter.
 5. **Render** the `.xmind` beside the outline. Resolve `<skill-dir>` to the directory containing this loaded `SKILL.md`:
@@ -40,7 +40,7 @@ Build an input matrix under each endpoint. Use these sub-branches **in order**, 
 
 Group query cases as endpoint → Query parameters → parameter name → case; keep each parameter’s cases together, including on non-GET endpoints.
 
-Every validation case includes a `Sample input:` child with concrete request data before its expected-result leaves. Supply representative values for each relevant equivalence class: omitted, empty (`?limit=`), whitespace (`?limit=%20`), malformed, wrong type, and boundaries just below/at/above documented limits. Distinguish omission from the literal string `null`. Keep other inputs valid; split samples into separate cases when expected outcomes differ. Use safe synthetic values; if a limit or fixture is unknown, identify the missing prerequisite in Open Questions / Notes and mark the affected case `@TBD` rather than inventing it.
+Every validation case includes a `Sample input:` child with concrete request data. Nest that input's expected-result leaves beneath it. Supply representative values for each relevant equivalence class: omitted, empty (`?limit=`), whitespace (`?limit=%20`), malformed, wrong type, and boundaries just below/at/above documented limits. Distinguish omission from the literal string `null`. Keep other inputs valid; split samples into separate cases when expected outcomes differ. Use safe synthetic values; if a limit or fixture is unknown, identify the missing prerequisite in Open Questions / Notes and mark the affected case `@TBD` rather than inventing it.
 
 For Method and Path/Endpoint cases, use the [default routing error bodies](REFERENCE.md#default-routing-errors).
 
@@ -48,7 +48,7 @@ Cover all schema validation here. Business Scenarios assumes valid input and cov
 
 ### 2. Business Scenarios (gated decision tree)
 
-Build one decision tree per endpoint. At each gate, label the passing branch with the condition that was met (for example, `Authenticated`, `Amount within allowed range`, or `Balance sufficient`) and nest the next gate beneath it. Place failure conditions as siblings, each ending in error-result leaves. Attach success-result leaves directly beneath the final passing condition; the route to success should read as a sequence of met conditions. Record the schema-valid input assumption under Open Questions / Notes, scoped to the endpoint.
+Build one decision tree per endpoint. At each gate, label the passing branch with the condition that was met (for example, `Authenticated`, `Amount within allowed range`, or `Balance sufficient`) and nest the next gate beneath it. Place failure conditions as siblings. Under each terminal failure or success condition, add a `Sample data test:` child with a concrete fixture or trigger, then nest its expected-result leaves beneath it. The route to success should read as a sequence of met conditions. Record the schema-valid input assumption under Open Questions / Notes, scoped to the endpoint.
 
 **Gate order** — record each skipped gate and its reason under Open Questions / Notes; an unexplained omission is a coverage gap:
 
@@ -59,7 +59,7 @@ Build one decision tree per endpoint. At each gate, label the passing branch wit
 5. **Business rules** (limits, allowed state/transition) → fail per rule
 6. **Resource/state** (balance, existence, idempotency) → fail per check
 
-After the last applicable gate, write the successful HTTP status and response assertions as children of the final passing condition.
+After the last applicable gate, add the success sample data test beneath the final passing condition and nest the successful HTTP status and response assertions beneath that sample.
 
 For flows spanning multiple endpoints, add a `## Journey: <name>` tree with sequential calls as gates.
 
@@ -82,18 +82,20 @@ Place this branch last. List every:
 - **Skipped gates** — gates recorded in Open Questions / Notes
 - **Continuation with no fail fork** — passing branches without failure siblings
 
-## Expected results are leaf topics, not notes
+## Expected results are children of sample input/data tests
 
-Write each expected assertion from the design doc as a separate leaf under its scenario:
+Write each expected assertion from the design doc as a separate leaf under its sample input/data test:
 
 ```markdown
 - amount < minimum required
-  - HTTP Status 400
-  - error code LB_API_AMT_001
-  - message "amount below minimum"
+  - Sample data test: amount below documented minimum
+    - HTTP Status 400
+    - error code LB_API_AMT_001
+    - message "amount below minimum"
 - amount within allowed range
-  - HTTP Status 200
-  - <key success-response assertions>
+  - Sample data test: valid amount and sufficient balance
+    - HTTP Status 200
+    - <key success-response assertions>
 ```
 
 Use `TBD` for undocumented result fields and tag the affected fork `@TBD`. If the code is known but the message is not, only the message becomes `TBD`.

@@ -46,7 +46,7 @@ ticket tone, and final quality check referenced by `SKILL.md`.
 | **Priority** | Critical / High / Medium / Low |
 | **Issue Type** | Select from Issue Type definitions below |
 | **Scope** | Single component / Single page / Multiple pages / Platform-wide |
-| **Workaround** | ✅ Description of workaround, or ❌ None |
+| **Workaround** | Description of workaround, or `None` |
 | **Impact** | Plain-language explanation of user / system impact |
 
 ### Severity Guidelines
@@ -103,7 +103,7 @@ Reproduce and confirm (see `debug-mantra`), then triage:
 | Selector / locator drift | Fix the test |
 | Stale assertion after intended product change | Update the test |
 | Test data / env / auth setup | Fix the harness |
-| **Genuine product regression** | ✅ File the Jira bug ticket |
+| **Genuine product regression** | File the Jira bug ticket |
 
 **Confirmation criteria before filing:**
 - Reproduced deterministically, or documented as intermittent with observed rate.

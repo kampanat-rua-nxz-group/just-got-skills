@@ -1,6 +1,7 @@
 ---
-name: create-bug-ticket
+name: "create-bug-ticket"
 description: Use when the user wants to document or file a defect from QA evidence such as text, screenshots, API responses, DevTools output, automation failures, or production monitoring.
+model: sonnet
 ---
 
 # Create Bug Ticket
@@ -52,6 +53,6 @@ Continue only with a confirmed product defect. Flaky / selector / test-data / st
 
 9. **Attachments** — table every piece of evidence; otherwise write: `No attachments provided. QA to attach before filing.`
 
-10. **QA Note** — a `> 💡 **QA Note:**` block covering regression scenarios, edge cases, and related components.
+10. **QA Note** — a `> **QA Note:**` block (no emoji) covering regression scenarios, edge cases, and related components.
 
 Before presenting, apply [Tone Contract](REFERENCE.md#tone-contract) and complete its [Quality Checklist](REFERENCE.md#quality-checklist).

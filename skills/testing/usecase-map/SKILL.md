@@ -12,7 +12,7 @@ Turn feature requirements into a QA use-case mind map: the agent writes a Markdo
 
 1. **Gather context** — read the feature description, user story, acceptance criteria, spec, and design doc, including error codes, messages, and limits. Ask only when ambiguity prevents mapping; handle undocumented values as described below.
 2. **Build the map** using the taxonomy below. Put expected-result leaves under each sample input/data test; bold scenario conditions that need attention in the Markdown outline.
-3. **Review coverage** and populate Coverage Gaps from the completed trees.
+3. **Review coverage** and populate Coverage Gaps from the completed trees. Before saving, check each Business Scenarios and Journey tree against the nesting rule in section 2: no `continue` leaf, no run of gate siblings at one indent, and every gate's passing branch contains the next gate. Also check Journeys: none runs deeper than about 10 levels, a long one is split by phase and numbered, each piece ends on a pointer to the next, and each piece is itself a chain, not one gate over a flat list of outcomes. Fix any tree that fails.
 4. **Save the outline** as plain Markdown at `docs/testcases/<feature>-usecase-map.md` in the project repo. Create the directory if needed; omit frontmatter.
 5. **Render** the `.xmind` beside the outline. Resolve `<skill-dir>` to the directory containing this loaded `SKILL.md`:
    ```bash
@@ -61,7 +61,83 @@ Build one decision tree per endpoint. At each gate, label the passing branch wit
 
 After the last applicable gate, add the success sample data test beneath the final passing condition and nest the successful HTTP status and response assertions beneath that sample.
 
-For flows spanning multiple endpoints, add a `## Journey: <name>` tree with sequential calls as gates.
+**Nest the chain; never list the gates flat.** Each gate is a node whose children are its failure conditions plus exactly one passing branch. The next gate sits inside that passing branch, so the success path gets one level deeper per gate and reads top to bottom as a story. A gate's passing branch is always a node of its own. A `→ continue` or `continue` leaf is not a passing branch, and a row of gate siblings at one indent level is the flat shape this section forbids, however it is labelled.
+
+Wrong, flat. The reader must rebuild the order in their head:
+
+```markdown
+- Submit withdrawal
+  - Authenticated?
+    - Invalid key
+      - HTTP Status 401
+    - authenticated → continue
+  - Amount ≥ minimum?
+    - Below minimum
+      - HTTP Status 400
+    - meets minimum → continue
+  - Balance sufficient?
+    - Insufficient
+      - HTTP Status 400
+    - sufficient → Success
+```
+
+Right, nested. Each passing branch holds the next gate:
+
+```markdown
+- Submit withdrawal
+  - Authenticated?
+    - Invalid key
+      - HTTP Status 401
+    - Authenticated
+      - Amount ≥ minimum?
+        - Below minimum
+          - HTTP Status 400
+        - Amount meets minimum
+          - Balance sufficient?
+            - Insufficient
+              - HTTP Status 400
+            - Balance sufficient → Success
+              - HTTP Status 200
+```
+
+The same rule applies inside a Journey and inside a state machine such as a worker or checker. Where a state offers alternatives rather than an order (for example the row's status), list the states as siblings, then nest each state's own checks inside it. When a map already in the repo has a flat Business Scenarios section, restructure it to this shape rather than copying its style.
+
+For flows spanning multiple endpoints, add a `## Journey: <name>` tree with sequential calls as gates, nested the same way.
+
+**Split a long Journey by phase, and keep each piece a chain.** A tree that runs deeper than about 10 levels, or that a reader cannot hold on one screen, is split into numbered Journeys at the natural phase boundaries of the flow (for example Claim, Prepare, Send, Proof). Splitting shortens the tree. It does not replace the chain.
+
+- Name the pieces in order: `Journey: <flow> (1 of 4) — <phase>`. Add a note under each title saying where it starts (`Starts from a claimed row (Journey 1)`) and where it ends.
+- End each piece on a leaf that points to the next one (`Committed → continues in Journey 3 (Send)`), so the sequence survives across trees. A pointer leaf at a phase boundary is allowed. It is the only place a `continue`-style leaf is.
+- Inside each piece, apply the nesting rule again. Put the failure and alternative outcomes of one step as siblings under that step, and nest every follow-on step inside the branch it follows. Do not leave a piece as one gate with a flat list of outcomes, each ending in a one-line result.
+
+Wrong, split but flat. Journey 3 lists outcomes and nothing follows from any of them:
+
+```markdown
+- Journey: Worker (3 of 4) — Send
+  - Send result?
+    - Accepted
+    - Underpriced
+    - Insufficient funds
+    - Timeout
+```
+
+Right, split and chained. Each outcome carries what happens next:
+
+```markdown
+- Journey: Worker (3 of 4) — Send
+  - Send result?
+    - Not accepted
+      - Insufficient funds
+        - Hold and alert
+        - Wallet funded → next re-send accepted
+    - Timeout (ambiguous) → Journey 4 proof
+    - Accepted
+      - Does the checker see a mined attempt?
+        - Not yet: re-send, then Journey 4
+        - Mined → CONFIRMING (checker journey)
+```
+
+When a gate offers alternatives of one decision, list them as siblings. When one step leads to another, nest.
 
 ### 3. Cross-cutting (Security & Edge)
 

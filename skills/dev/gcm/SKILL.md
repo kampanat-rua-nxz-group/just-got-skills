@@ -1,6 +1,7 @@
 ---
 name: gcm
 description: Use when the user asks for Conventional Commit wording, wants to commit current changes, needs a commit split, or invokes gcm.
+model: haiku
 ---
 
 # gcm — git commit message generator

@@ -70,9 +70,9 @@ Optional. List unresolved decisions that are explicitly `TBD` elsewhere in the t
 
 Optional. List high-value happy-path, negative, permission, boundary, and regression scenarios supported by the requirements.
 
-### 4. Quality check
+### 4. Output
 
-Before presenting the ticket, confirm that all six required headings are present, optional headings are non-empty, rules and criteria are traceable, acceptance criteria are observable, and assumptions are labeled. Return the ticket only; do not create or modify a Jira issue.
+Return the ticket only; do not create or modify a Jira issue.
 
 ## Example
 

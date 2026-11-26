@@ -30,26 +30,44 @@ Create a Conventional-Commit-style pull request title and description from a bra
      - `## Summary` — bullet points; each states what changed **and why**, inferred from commit messages and code intent, not just a restatement of the diff stat
      - `## Test plan` — checklist (`- [ ]`) of concrete verification steps using the repo's real commands from step 4
 
-7. **Ask who reviews.** Before emitting the command, ask the user who to request as reviewer(s). Offer logins from `.github/CODEOWNERS` or from reviewers requested on recent PRs (`gh pr list --state all --limit 10 --json reviewRequests`) as suggestions, excluding the author. Never pick a reviewer yourself. If the user names none or declines, omit `--reviewer`. Complete this step when the user has answered.
+7. **Verify the checklists.** Before showing the draft, check every checklist item in the body: the `## Test plan` items and any checklist from the repo template. Run each item that a local, read-only command can check, from the repo root. Tick `- [x]` only when the command ran in this session and its output shows a pass. Read the output, not only the exit code: a secret scan that hits only docs quoting the scan command exits as a failure and reads as a pass, so word that ticked item to say what the pass means. Leave `- [ ]` on every item you did not run: ones that need an app or a deployed environment, and commands that write files or change git state. A failed check stays `- [ ]` and goes to the user with its output. Never show the draft before this step ends. Complete this step when every checklist item is either ticked with run evidence or unticked with a stated reason.
 
 ## Output format
 
-One fenced `bash` block containing a ready-to-run `gh pr create` command, nothing else. Use `--base <detected base>` and `--head <current branch>` (only include `--head` when drafting for a branch other than the one already checked out), `--draft` when the user asks for a draft PR, `--assignee @me` always (assigns the PR to the authenticated `gh` user; omit only if the user says not to), `--reviewer <comma-separated logins>` with the logins the user chose in step 7, title via `--title`, and body via `--body "$(cat <<'EOF' ... EOF)"` so multi-line markdown survives shell quoting untouched. The body follows the template chosen in step 3; the example shows the skill template:
+Output the PR details, not a `gh pr create` command. The user pastes each field into the PR form by hand. Show the draft only after steps 7 and 8 are done. Use this layout, in this order:
 
-```bash
-gh pr create --base main --head feature/my-branch --assignee @me --reviewer login1,login2 \
-  --title "type(scope): subject" \
-  --body "$(cat <<'EOF'
+1. A details list, one line each: `Base: <detected base>`, `Head: <branch>`, `Draft: yes` (only when the user asked for a draft), `Assignee: me` (omit only if the user said not to), `Reviewers: <logins or none>`. For a stacked PR, add `Stacked on: #<n>`.
+2. The title, alone in a fenced block with no language tag. Name the field on the line above the block ("Title").
+3. The body, alone in a fenced block with no language tag, after a line naming the field ("Description"). Make the fence longer than any backtick run inside the body (use four backticks when the body holds a code fence). The body follows the template chosen in step 3. Checklist items carry the state step 7 left them in.
+4. A verification note after the blocks: one line per unticked checklist item, starting `Not verified:` and naming the reason, and one line per failed check with its output. Write `All checklist items verified` when none apply. Nothing else.
+
+Skill-template example:
+
+````
+Base: main
+Head: feature/my-branch
+Assignee: me
+Reviewers: login1, login2
+
+Title
+```
+type(scope): subject
+```
+
+Description
+```
 ## Summary
 - ...
 
 ## Test plan
-- [ ] ...
-EOF
-)"
+- [x] `<repo command>` passes (ran in this session)
+- [ ] <item not run> (needs a deployed environment)
 ```
 
-When drafting for multiple branches in one request, emit one such block per branch, each in its own fenced code block, in the order the branches were given.
+Not verified: <item not run>, needs a deployed environment.
+````
+
+When drafting for multiple branches in one request, emit one such set per branch, in the order the branches were given, each headed by its branch name.
 
 ## Failure handling
 

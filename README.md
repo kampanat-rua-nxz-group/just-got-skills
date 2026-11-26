@@ -40,6 +40,7 @@ ln -s ~/just-got-skills/skills/testing/prompt-crafter    ~/.claude/skills/prompt
 ln -s ~/just-got-skills/skills/dev/gcm                   ~/.claude/skills/gcm
 ln -s ~/just-got-skills/skills/dev/draft-pr              ~/.claude/skills/draft-pr
 ln -s ~/just-got-skills/skills/dev/create-jira-story-task ~/.claude/skills/create-jira-story-task
+ln -s ~/just-got-skills/skills/dev/summarize-pr          ~/.claude/skills/summarize-pr
 ```
 
 `git pull` in `~/just-got-skills` then updates every linked skill in place.
@@ -65,6 +66,7 @@ ln -s ~/just-got-skills/skills/dev/create-jira-story-task ~/.claude/skills/creat
 - **[gcm](./skills/dev/gcm/SKILL.md)** — Caveman-style Conventional Commit messages from the working-tree diff; detects mixed concerns and emits a split-commit plan, warns on likely secrets/PII. Copy-paste text only, never runs git. `/gcm`.
 - **[draft-pr](./skills/dev/draft-pr/SKILL.md)** — PR title + description from the diff between the current branch and its base branch, using the repo's real test commands. Follows the repo's `.github/PULL_REQUEST_TEMPLATE.md` when present, otherwise Summary + Test plan. Copy-paste text only, never runs git or `gh pr create`. `/draft-pr`.
 - **[create-jira-story-task](./skills/dev/create-jira-story-task/SKILL.md)** — Copy-ready non-defect Jira Stories and Tasks with required requirements fields, testable acceptance criteria, and explicit unresolved questions.
+- **[summarize-pr](./skills/dev/summarize-pr/SKILL.md)** — Summarizes a pull request into a Markdown note in the project's Obsidian vault folder (`prs/`): the change by system part, shortened diffs within 20% of the PR's changed lines, tests checked against their assertions, removed tests, open human review threads, and a QA focus list. Read-only toward GitHub and git; needs `gh`, `jq` and Python 3. `/summarize-pr`.
 
 ## Validate
 

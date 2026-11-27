@@ -83,4 +83,4 @@ The first command checks skill packaging, links, references between skills, and 
 
 ## Credits
 
-`impact` is adapted from the `blast-radius` skill in poteto's [pstack](https://github.com/cursor/plugins/tree/main/pstack) (MIT). The skill-writing and behavior rules in `AGENTS.md` draw on its principles.
+`impact` is adapted from the `blast-radius` skill in poteto's [pstack](https://github.com/cursor/plugins/tree/main/pstack), Copyright (c) 2026 Lauren Tan, used under the MIT License. The full notice is in [`skills/testing/impact/LICENSE-pstack.txt`](./skills/testing/impact/LICENSE-pstack.txt), which installs with the skill. The skill-writing and behavior rules in `AGENTS.md` draw on its principles.

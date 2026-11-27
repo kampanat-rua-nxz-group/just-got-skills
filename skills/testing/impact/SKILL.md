@@ -12,13 +12,13 @@ A risk report that sounds right is worth nothing until its key facts are proven.
 
 ## Evidence levels
 
-Push each fact the change's safety depends on as far down this list as is cheap, and report the level it reached.
+Push each fact the change's safety depends on as far down this list as is cheap, and report the level it reached. The label in parentheses is the claim label from the repository's shared rules.
 
-1. **Asserted** — you said so. Not evidence on its own.
-2. **Cited** — a real `file:line`, or the library source at the pinned version.
-3. **Reasoned** — you walked the failure step by step and showed it cannot happen.
-4. **Run** — a script or test calls the real code and fails loudly if you are wrong.
-5. **Reproduced** — you saw it in the running app or environment.
+1. **Asserted** (`inferred`) — you said so. Not evidence on its own.
+2. **Cited** (`cited`) — a real `file:line`, or the library source at the pinned version.
+3. **Reasoned** (`inferred`) — you walked the failure step by step and showed it cannot happen.
+4. **Run** (`verified`) — a script or test calls the real code and fails loudly if you are wrong.
+5. **Reproduced** (`verified`) — you saw it in the running app or environment.
 
 ## Workflow
 
@@ -33,7 +33,7 @@ Push each fact the change's safety depends on as far down this list as is cheap,
    - **Downstream:** consumers several hops away, reports, exports, and scheduled jobs.
 4. **Rate each risk honestly.** Give how it breaks, the `file:line`, a real likelihood, the cost if it happens, and how to check it. Never invent a caller or an API. A search that finds nothing is an answer; show the search.
 5. **Prove the safety fact.** Write the smallest script or test that calls the real code, run it, and paste the command and its output. When it cannot run here, for example because of a missing environment or secret, say why, name the level reached, and give the exact command QA should run.
-6. **Turn confirmed risks into regression checks.** For each confirmed risk, name the existing test to run or the new scenario to add, ordered by risk. When the user wants full scenarios, hand the confirmed risks to `scenario` if it is installed.
+6. **Turn confirmed risks into regression checks.** For each confirmed risk, name the existing test to run or the new scenario to add, ordered by risk. When the user wants full scenarios, hand the confirmed risks to the `scenario` skill.
 
 ## Output
 
@@ -46,4 +46,4 @@ Push each fact the change's safety depends on as far down this list as is cheap,
 
 ---
 
-Adapted from `blast-radius` in poteto's [pstack](https://github.com/cursor/plugins/tree/main/pstack) (MIT).
+Adapted from `blast-radius` in poteto's [pstack](https://github.com/cursor/plugins/tree/main/pstack). Copyright (c) 2026 Lauren Tan, MIT License. The full notice is in [`LICENSE-pstack.txt`](LICENSE-pstack.txt).

@@ -45,7 +45,7 @@ The name is the handle a user types after `/`. The description carries the meani
 ## Behavior every skill should keep
 
 - **Check the real thing.** Run the test, read the actual response, inspect the diff. "It compiles", a cached result, or a report that something passed is not proof. When a check fails, suspect how you checked before you suspect the system.
-- **Label each claim by its source.** Mark it as verified (ran or observed), cited (`file:line` or a document section), inferred, or `TBD`. Never present an inference as a requirement.
+- **Label each claim by its source.** Mark it as verified (ran or observed), cited (`file:line` or a document section), inferred, or `TBD`. Never present an inference as a requirement. Skills that grade evidence on a longer scale map to these labels: Asserted and Reasoned are `inferred`, Cited is `cited`, Run and Reproduced are `verified`.
 - **Do not hand the user a check the agent can run.** Ask the user only for facts the agent cannot observe.
 - **Proceed on reversible work.** Ask before irreversible or outward-facing actions: pushing, filing tickets, sending messages, or deleting data.
 - **Write for a tired reader.** Use the plain word, one name per thing, and the number instead of an adverb. No filler, no AI vocabulary (crucial, delve, leverage, robust), and no chatbot openers or closers.

@@ -1,4 +1,4 @@
-"""Check a digest vault note against the rules a script can check.
+"""Check a tldr vault note against the rules a script can check.
 
 Usage: python3 check_note.py <note.md> <pr.json> [<test-changes.tsv>]
 

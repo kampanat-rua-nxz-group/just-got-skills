@@ -42,7 +42,7 @@ ln -s ~/just-got-skills/skills/testing/tdd      ~/.claude/skills/tdd
 ln -s ~/just-got-skills/skills/dev/gcm          ~/.claude/skills/gcm
 ln -s ~/just-got-skills/skills/dev/pr           ~/.claude/skills/pr
 ln -s ~/just-got-skills/skills/dev/story        ~/.claude/skills/story
-ln -s ~/just-got-skills/skills/dev/digest       ~/.claude/skills/digest
+ln -s ~/just-got-skills/skills/dev/tldr         ~/.claude/skills/tldr
 ```
 
 `git pull` in `~/just-got-skills` then updates every linked skill in place.
@@ -70,7 +70,7 @@ ln -s ~/just-got-skills/skills/dev/digest       ~/.claude/skills/digest
 - **[gcm](./skills/dev/gcm/SKILL.md)** — Caveman-style Conventional Commit messages from the working-tree diff; detects mixed concerns and emits a split-commit plan, warns on likely secrets/PII. Copy-paste text only, never runs git. `/gcm`.
 - **[pr](./skills/dev/pr/SKILL.md)** — PR title + description from the diff between the current branch and its base branch, using the repo's real test commands. Follows the repo's `.github/PULL_REQUEST_TEMPLATE.md` when present, otherwise Summary + Test plan. Copy-paste text only, never runs git or `gh pr create`. `/pr`.
 - **[story](./skills/dev/story/SKILL.md)** — Copy-ready non-defect Jira Stories and Tasks with required requirements fields, testable acceptance criteria, and explicit unresolved questions.
-- **[digest](./skills/dev/digest/SKILL.md)** — Summarizes a pull request into a Markdown note in the project's Obsidian vault folder (`prs/`): the change by system part, shortened diffs within 20% of the PR's changed lines, tests checked against their assertions, removed tests, open human review threads, and a QA focus list. Read-only toward GitHub and git; needs `gh`, `jq` and Python 3. `/digest`.
+- **[tldr](./skills/dev/tldr/SKILL.md)** — Summarizes a pull request into a Markdown note in the project's Obsidian vault folder (`prs/`): the change by system part, shortened diffs within 20% of the PR's changed lines, tests checked against their assertions, removed tests, open human review threads, and a QA focus list. Read-only toward GitHub and git; needs `gh`, `jq` and Python 3. `/tldr`.
 
 ## Validate
 

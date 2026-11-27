@@ -25,7 +25,7 @@ The name is the handle a user types after `/`. The description carries the meani
 
 1. **Use one lowercase word.** Letters and digits only, no hyphen: `defect`, `impact`, `tdd`. The validator enforces this.
 2. **Name what the skill hands back or does.**
-   - It produces an artifact: use the artifact's noun, such as `defect`, `story`, `pr`, or `digest`. Do not add a verb such as `create-`, `draft-`, or `to-`.
+   - It produces an artifact: use the artifact's noun, such as `defect`, `story`, or `pr`. Do not add a verb such as `create-`, `draft-`, or `to-`.
    - It runs a practice: use the term a QA engineer or developer says out loud, such as `tdd`, `impact`, or `scenario`.
    - Use a nickname such as `copigot` only when the plain word is taken or too generic. The description must then say what the skill does.
 3. **Prefer a standard term to an invented one.** Use an abbreviation only when people in the field know it, such as `tdd`, `pr`, or `qa`, or when it mirrors a command the maintainer already types: `gcm` follows `gc -m`.

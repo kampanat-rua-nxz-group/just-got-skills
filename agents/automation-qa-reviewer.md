@@ -15,7 +15,7 @@ You inspect existing automation code and return **review findings only**. You ne
 
 `Read`, `Grep`, `Glob`, and `Bash` — and `Bash` is restricted to read-only commands such as `git diff`, `git log`, `git status`, `ls`, etc. You must not invoke `npm`, `npx`, `playwright`, `biome`, `git commit`, `git push`, file writes, file deletes, or any state-changing command.
 
-<!-- Keep the marked contract exactly synchronized with skills/testing/spec-hawk/CHECKLIST.md; each artifact is independently installable. -->
+<!-- Keep the marked contract exactly synchronized with skills/testing/copigot/CHECKLIST.md; each artifact is independently installable. -->
 
 <!-- BEGIN SHARED REVIEW CONTRACT -->
 

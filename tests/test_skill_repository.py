@@ -21,11 +21,11 @@ class SkillRepositoryValidationTest(unittest.TestCase):
             root = Path(directory)
             self.write_skill(
                 root,
-                "example-skill",
-                "---\nname: example-skill\ndescription: Use when reviewing examples.\n---\n"
+                "example",
+                "---\nname: example\ndescription: Use when reviewing examples.\n---\n"
                 "Read [the exact rules](REFERENCE.md#exact-rules) when needed.\n",
             )
-            (root / "skills/testing/example-skill/REFERENCE.md").write_text(
+            (root / "skills/testing/example/REFERENCE.md").write_text(
                 "# Reference\n\n## Exact Rules\n", encoding="utf-8"
             )
             self.assertEqual([], validate_repository(root))
@@ -35,8 +35,8 @@ class SkillRepositoryValidationTest(unittest.TestCase):
             root = Path(directory)
             self.write_skill(
                 root,
-                "example-skill",
-                "---\nname: example-skill\ndescription: Use when reviewing examples.\n---\n"
+                "example",
+                "---\nname: example\ndescription: Use when reviewing examples.\n---\n"
                 "Read [the reference](MISSING.md#exact-rules).\n",
             )
 
@@ -49,11 +49,11 @@ class SkillRepositoryValidationTest(unittest.TestCase):
             root = Path(directory)
             self.write_skill(
                 root,
-                "example-skill",
-                "---\nname: example-skill\ndescription: Use when reviewing examples.\n---\n"
+                "example",
+                "---\nname: example\ndescription: Use when reviewing examples.\n---\n"
                 "Read [the reference](REFERENCE.md#missing-rules).\n",
             )
-            (root / "skills/testing/example-skill/REFERENCE.md").write_text(
+            (root / "skills/testing/example/REFERENCE.md").write_text(
                 "# Reference\n\n## Exact Rules\n", encoding="utf-8"
             )
 
@@ -66,7 +66,7 @@ class SkillRepositoryValidationTest(unittest.TestCase):
             root = Path(directory)
             self.write_skill(
                 root,
-                "wrong-folder",
+                "wrongfolder",
                 "---\nname: other-name\ndescription: Use when testing.\n---\n"
                 "Read [missing](REFERENCE.md).\n" + "TO" + "DO: replace scaffold.\n",
             )
@@ -80,16 +80,46 @@ class SkillRepositoryValidationTest(unittest.TestCase):
             root = Path(directory)
             self.write_skill(
                 root,
-                "example-skill",
-                "---\nname: example-skill\ndescription: Use when reviewing examples.\n"
+                "example",
+                "---\nname: example\ndescription: Use when reviewing examples.\n"
                 "Body without a closing boundary.\n",
             )
             errors = "\n".join(validate_repository(root))
             self.assertIn("missing closing frontmatter boundary", errors)
 
-    def test_current_repository_has_six_discoverable_skills(self):
+    def test_reports_invoked_skill_missing_from_repository(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_skill(
+                root,
+                "example",
+                "---\nname: example\ndescription: Use when reviewing examples.\n---\n"
+                "Invoke `missing-skill`, then apply the `example` skill.\n",
+            )
+
+            errors = "\n".join(validate_repository(root))
+
+            self.assertIn("unknown skill reference 'missing-skill'", errors)
+            self.assertNotIn("'example'", errors)
+
+    def test_reports_multiword_and_reserved_skill_names(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for folder in ("two-words", "bug"):
+                self.write_skill(
+                    root,
+                    folder,
+                    f"---\nname: {folder}\ndescription: Use when testing names.\n---\n",
+                )
+
+            errors = "\n".join(validate_repository(root))
+
+            self.assertIn("skill name 'two-words' is not one lowercase word", errors)
+            self.assertIn("skill name 'bug' is a runtime command or bundled skill", errors)
+
+    def test_current_repository_has_twelve_discoverable_skills(self):
         skill_files = sorted(ROOT.glob("skills/*/*/SKILL.md"))
-        self.assertEqual(9, len(skill_files))
+        self.assertEqual(12, len(skill_files))
 
 
 if __name__ == "__main__":

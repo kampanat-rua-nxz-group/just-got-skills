@@ -3,21 +3,23 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DRAFT_PR = ROOT / "skills/dev/draft-pr/SKILL.md"
+DRAFT_PR = ROOT / "skills/dev/pr/SKILL.md"
 GCM = ROOT / "skills/dev/gcm/SKILL.md"
 GCM_REFERENCE = ROOT / "skills/dev/gcm/REFERENCE.md"
-JIRA_STORY_TASK = ROOT / "skills/dev/create-jira-story-task/SKILL.md"
-BUG_TICKET = ROOT / "skills/testing/create-bug-ticket/SKILL.md"
-BUG_TICKET_REFERENCE = ROOT / "skills/testing/create-bug-ticket/REFERENCE.md"
-USECASE_MAP = ROOT / "skills/testing/usecase-map/SKILL.md"
+JIRA_STORY_TASK = ROOT / "skills/dev/story/SKILL.md"
+BUG_TICKET = ROOT / "skills/testing/defect/SKILL.md"
+BUG_TICKET_REFERENCE = ROOT / "skills/testing/defect/REFERENCE.md"
+USECASE_MAP = ROOT / "skills/testing/mindmap/SKILL.md"
 
 DRAFT_PR_CONTRACT = (
-    "gh pr create",
+    "never run `git commit`, `git add`, `git push`, or `gh pr create`",
     "## Summary",
     "## Test plan",
-    "--base",
-    "--title",
-    "--body",
+    "Base: <detected base>",
+    "Head: <branch>",
+    "Title",
+    "Description",
+    "Not verified:",
     "git log",
     "git diff",
 )
@@ -208,7 +210,7 @@ class JiraStoryTaskContractTest(unittest.TestCase):
         assert_contains_all(entrypoint, (
             "Story",
             "Task",
-            "create-bug-ticket",
+            "`defect`",
             "TBD",
             "copy-ready",
         ))
@@ -259,6 +261,7 @@ class UsecaseMapContractTest(unittest.TestCase):
     )
     COVERAGE_GAPS = (
         "`@TBD` / `TBD` forks",
+        "`@observed` forks",
         "Skipped gates",
         "Continuation with no fail fork",
     )
@@ -267,6 +270,7 @@ class UsecaseMapContractTest(unittest.TestCase):
         "`@nondeterministic`",
         "`@manual`",
         "`@TBD`",
+        "`@observed`",
     )
 
     def test_description_is_trigger_focused_and_runtime_neutral(self):
@@ -299,7 +303,7 @@ class UsecaseMapContractTest(unittest.TestCase):
 
     def test_expected_results_are_children_of_sample_input_or_data(self):
         entrypoint = body(USECASE_MAP)
-        reference = (ROOT / "skills/testing/usecase-map/REFERENCE.md").read_text(encoding="utf-8")
+        reference = (ROOT / "skills/testing/mindmap/REFERENCE.md").read_text(encoding="utf-8")
         self.assertNotIn("- → Success", entrypoint)
         self.assertNotIn("- → Success", reference)
         self.assertIn("- Balance sufficient\n            - Sample data test:", reference)
@@ -308,16 +312,16 @@ class UsecaseMapContractTest(unittest.TestCase):
 
     def test_outline_highlights_scenario_conditions_with_markdown_bold(self):
         entrypoint = body(USECASE_MAP)
-        reference = (ROOT / "skills/testing/usecase-map/REFERENCE.md").read_text(encoding="utf-8")
+        reference = (ROOT / "skills/testing/mindmap/REFERENCE.md").read_text(encoding="utf-8")
         self.assertIn("`**text**` → highlight a scenario condition", entrypoint)
         self.assertIn("- **Insufficient balance**", reference)
         self.assertNotIn("[!]", entrypoint)
         self.assertNotIn("[!]", reference)
 
 
-class SpecHawkContractTest(unittest.TestCase):
-    SKILL = ROOT / "skills/testing/spec-hawk/SKILL.md"
-    CHECKLIST = ROOT / "skills/testing/spec-hawk/CHECKLIST.md"
+class CopigotContractTest(unittest.TestCase):
+    SKILL = ROOT / "skills/testing/copigot/SKILL.md"
+    CHECKLIST = ROOT / "skills/testing/copigot/CHECKLIST.md"
     REVIEWER = ROOT / "agents/automation-qa-reviewer.md"
     SHARED_START = "<!-- BEGIN SHARED REVIEW CONTRACT -->"
     SHARED_END = "<!-- END SHARED REVIEW CONTRACT -->"
@@ -365,7 +369,7 @@ class SpecHawkContractTest(unittest.TestCase):
         self.assertEqual(frontmatter(self.SKILL)["description"], (
             "Use when reviewing or auditing Playwright and TypeScript automation "
             "specs, tests, services, models, helpers, or utilities, including "
-            "pre-PR checks and the /spec-hawk trigger."
+            "pre-PR checks and the /copigot trigger."
         ))
 
     def test_entrypoint_retains_nine_areas_and_both_review_branches(self):
@@ -399,15 +403,94 @@ class SpecHawkContractTest(unittest.TestCase):
         ))
 
 
+class ImpactContractTest(unittest.TestCase):
+    SKILL = ROOT / "skills/testing/impact/SKILL.md"
+
+    def test_description_is_trigger_focused(self):
+        description = frontmatter(self.SKILL)["description"]
+        self.assertTrue(description.startswith("Use when"))
+        self.assertIn("/impact", description)
+
+    def test_entrypoint_proves_the_safety_fact_and_stays_read_only(self):
+        entrypoint = body(self.SKILL)
+        assert_contains_all(entrypoint, (
+            "## Evidence levels",
+            "**Asserted**", "**Cited**", "**Reasoned**", "**Run**", "**Reproduced**",
+            "**Name the safety fact.**",
+            "**Prove the safety fact.**",
+            "Never invent a caller or an API.",
+            "read-only toward the project",
+            "`unproven`",
+            "**Cleared**",
+            "**Regression checks**",
+            "**Not checked**",
+        ))
+
+
+class TddContractTest(unittest.TestCase):
+    SKILL = ROOT / "skills/testing/tdd/SKILL.md"
+
+    def test_description_is_trigger_focused(self):
+        description = frontmatter(self.SKILL)["description"]
+        self.assertTrue(description.startswith("Use when"))
+        self.assertIn("/tdd", description)
+
+    def test_entrypoint_keeps_fail_first_order_and_guardrails(self):
+        entrypoint = body(self.SKILL)
+        steps = (
+            "**Write the failing test first.**",
+            "**Run it before any fix.**",
+            "**Fix only when the user asked for the fix.**",
+            "**Rerun the regression test and the nearby tests.**",
+        )
+        positions = [entrypoint.index(step) for step in steps]
+        self.assertEqual(positions, sorted(positions))
+        assert_contains_all(entrypoint, (
+            "Prefer no new test over a bad test.",
+            "fail for the intended reason",
+            "Never change a test to match a wrong implementation.",
+            "**Failing before**",
+            "**Passing after**",
+        ))
+
+
+class QuestionsContractTest(unittest.TestCase):
+    SKILL = ROOT / "skills/testing/questions/SKILL.md"
+
+    def test_description_is_trigger_focused(self):
+        description = frontmatter(self.SKILL)["description"]
+        self.assertTrue(description.startswith("Use when"))
+        self.assertIn("/questions", description)
+
+    def test_entrypoint_keeps_minimum_pinpoint_and_ranking(self):
+        entrypoint = body(self.SKILL)
+        assert_contains_all(entrypoint, (
+            "Return at least two questions, and aim for three or more.",
+            "Never pad the list.",
+            "**Check before you keep a question.**",
+            "**Where:**", "**Quote:**", "**Why it matters:**", "**Options:**", "**Ask:**",
+            "**Checked and complete**",
+            "**Not reviewed**",
+            "Stay read-only.",
+        ))
+        ranks = ("**Blocking**", "**Important**", "**Minor**")
+        positions = [entrypoint.index(rank) for rank in ranks]
+        self.assertEqual(positions, sorted(positions))
+
+
 class RepositoryContractTest(unittest.TestCase):
     README = ROOT / "README.md"
     SKILL_LINKS = (
-        "[spec-hawk](./skills/testing/spec-hawk/SKILL.md)",
-        "[usecase-map](./skills/testing/usecase-map/SKILL.md)",
-        "[create-bug-ticket](./skills/testing/create-bug-ticket/SKILL.md)",
+        "[copigot](./skills/testing/copigot/SKILL.md)",
+        "[mindmap](./skills/testing/mindmap/SKILL.md)",
+        "[defect](./skills/testing/defect/SKILL.md)",
         "[gcm](./skills/dev/gcm/SKILL.md)",
-        "[draft-pr](./skills/dev/draft-pr/SKILL.md)",
-        "[create-jira-story-task](./skills/dev/create-jira-story-task/SKILL.md)",
+        "[pr](./skills/dev/pr/SKILL.md)",
+        "[story](./skills/dev/story/SKILL.md)",
+        "[impact](./skills/testing/impact/SKILL.md)",
+        "[tdd](./skills/testing/tdd/SKILL.md)",
+        "[probe](./skills/testing/probe/SKILL.md)",
+        "[questions](./skills/testing/questions/SKILL.md)",
     )
 
     def test_readme_documents_catalog_installation_and_validation(self):

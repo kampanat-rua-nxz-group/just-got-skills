@@ -11,6 +11,11 @@ from urllib.parse import unquote
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 HEADING_RE = re.compile(r"^#{1,6}\s+(.+?)\s*#*\s*$")
 UNFINISHED_MARKERS = ("TO" + "DO", "implement " + "later", "fill in " + "details")
+SKILL_NAME_RE = re.compile(r"^[a-z][a-z0-9]*$")
+RESERVED_NAMES_FILE = Path(__file__).with_name("reserved_skill_names.txt")
+SKILL_REFERENCE_RE = re.compile(
+    r"\b[Ii]nvoke `([a-z][a-z0-9-]*)`|\bthe `([a-z][a-z0-9-]*)` skill\b"
+)
 
 
 def parse_frontmatter(path: Path) -> dict[str, str]:
@@ -88,6 +93,39 @@ def markdown_heading_anchors(path: Path) -> set[str]:
     return anchors
 
 
+def reserved_skill_names() -> set[str]:
+    """Return runtime command and bundled skill names a skill must not take."""
+    if not RESERVED_NAMES_FILE.exists():
+        return set()
+    lines = RESERVED_NAMES_FILE.read_text(encoding="utf-8").splitlines()
+    return {line.strip() for line in lines if line.strip() and not line.startswith("#")}
+
+
+def name_convention_errors(skill_file: Path, reserved: set[str]) -> list[str]:
+    """Check the AGENTS.md naming rules a script can check."""
+    name = skill_file.parent.name
+    relative = skill_file.as_posix()
+    errors: list[str] = []
+    if not SKILL_NAME_RE.match(name):
+        errors.append(f"{relative}: skill name {name!r} is not one lowercase word")
+    if name in reserved:
+        errors.append(
+            f"{relative}: skill name {name!r} is a runtime command or bundled skill"
+        )
+    return errors
+
+
+def unknown_skill_references(skill_file: Path, known: set[str]) -> list[str]:
+    """Return errors for "invoke `x`" or "the `x` skill" naming no repository skill."""
+    errors: list[str] = []
+    for path in sorted(skill_file.parent.rglob("*.md")):
+        for match in SKILL_REFERENCE_RE.finditer(path.read_text(encoding="utf-8")):
+            name = match.group(1) or match.group(2)
+            if name not in known:
+                errors.append(f"{path.as_posix()}: unknown skill reference {name!r}")
+    return errors
+
+
 def validate_skill(skill_file: Path) -> list[str]:
     """Check frontmatter, folder/name agreement, links, and scaffold markers."""
     errors: list[str] = []
@@ -124,8 +162,13 @@ def validate_skill(skill_file: Path) -> list[str]:
 def validate_repository(root: Path) -> list[str]:
     """Return sorted validation errors for every skills/*/*/SKILL.md."""
     errors: list[str] = []
-    for skill_file in sorted(root.glob("skills/*/*/SKILL.md")):
+    skill_files = sorted(root.glob("skills/*/*/SKILL.md"))
+    known = {skill_file.parent.name for skill_file in skill_files}
+    reserved = reserved_skill_names()
+    for skill_file in skill_files:
         errors.extend(validate_skill(skill_file))
+        errors.extend(name_convention_errors(skill_file, reserved))
+        errors.extend(unknown_skill_references(skill_file, known))
     return sorted(errors)
 
 

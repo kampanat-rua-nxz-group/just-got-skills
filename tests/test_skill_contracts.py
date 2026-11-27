@@ -454,6 +454,30 @@ class TddContractTest(unittest.TestCase):
         ))
 
 
+class QuestionsContractTest(unittest.TestCase):
+    SKILL = ROOT / "skills/testing/questions/SKILL.md"
+
+    def test_description_is_trigger_focused(self):
+        description = frontmatter(self.SKILL)["description"]
+        self.assertTrue(description.startswith("Use when"))
+        self.assertIn("/questions", description)
+
+    def test_entrypoint_keeps_minimum_pinpoint_and_ranking(self):
+        entrypoint = body(self.SKILL)
+        assert_contains_all(entrypoint, (
+            "Return at least two questions, and aim for three or more.",
+            "Never pad the list.",
+            "**Check before you keep a question.**",
+            "**Where:**", "**Quote:**", "**Why it matters:**", "**Options:**", "**Ask:**",
+            "**Checked and complete**",
+            "**Not reviewed**",
+            "Stay read-only.",
+        ))
+        ranks = ("**Blocking**", "**Important**", "**Minor**")
+        positions = [entrypoint.index(rank) for rank in ranks]
+        self.assertEqual(positions, sorted(positions))
+
+
 class RepositoryContractTest(unittest.TestCase):
     README = ROOT / "README.md"
     SKILL_LINKS = (
@@ -466,6 +490,7 @@ class RepositoryContractTest(unittest.TestCase):
         "[impact](./skills/testing/impact/SKILL.md)",
         "[tdd](./skills/testing/tdd/SKILL.md)",
         "[probe](./skills/testing/probe/SKILL.md)",
+        "[questions](./skills/testing/questions/SKILL.md)",
     )
 
     def test_readme_documents_catalog_installation_and_validation(self):

@@ -32,17 +32,18 @@ Over HTTPS instead: `GITHUB_TOKEN=ghp_xxx npx skills add kampanat-rua-nxz-group/
 
 ```bash
 git clone git@github.com:kampanat-rua-nxz-group/just-got-skills.git ~/just-got-skills
-ln -s ~/just-got-skills/skills/testing/copigot  ~/.claude/skills/copigot
-ln -s ~/just-got-skills/skills/testing/scenario ~/.claude/skills/scenario
-ln -s ~/just-got-skills/skills/testing/mindmap  ~/.claude/skills/mindmap
-ln -s ~/just-got-skills/skills/testing/probe    ~/.claude/skills/probe
-ln -s ~/just-got-skills/skills/testing/defect   ~/.claude/skills/defect
-ln -s ~/just-got-skills/skills/testing/impact   ~/.claude/skills/impact
-ln -s ~/just-got-skills/skills/testing/tdd      ~/.claude/skills/tdd
-ln -s ~/just-got-skills/skills/dev/gcm          ~/.claude/skills/gcm
-ln -s ~/just-got-skills/skills/dev/pr           ~/.claude/skills/pr
-ln -s ~/just-got-skills/skills/dev/story        ~/.claude/skills/story
-ln -s ~/just-got-skills/skills/dev/tldr         ~/.claude/skills/tldr
+ln -s ~/just-got-skills/skills/testing/copigot   ~/.claude/skills/copigot
+ln -s ~/just-got-skills/skills/testing/questions ~/.claude/skills/questions
+ln -s ~/just-got-skills/skills/testing/scenario  ~/.claude/skills/scenario
+ln -s ~/just-got-skills/skills/testing/mindmap   ~/.claude/skills/mindmap
+ln -s ~/just-got-skills/skills/testing/probe     ~/.claude/skills/probe
+ln -s ~/just-got-skills/skills/testing/defect    ~/.claude/skills/defect
+ln -s ~/just-got-skills/skills/testing/impact    ~/.claude/skills/impact
+ln -s ~/just-got-skills/skills/testing/tdd       ~/.claude/skills/tdd
+ln -s ~/just-got-skills/skills/dev/gcm           ~/.claude/skills/gcm
+ln -s ~/just-got-skills/skills/dev/pr            ~/.claude/skills/pr
+ln -s ~/just-got-skills/skills/dev/story         ~/.claude/skills/story
+ln -s ~/just-got-skills/skills/dev/tldr          ~/.claude/skills/tldr
 ```
 
 `git pull` in `~/just-got-skills` then updates every linked skill in place.
@@ -57,6 +58,7 @@ ln -s ~/just-got-skills/skills/dev/tldr         ~/.claude/skills/tldr
 
 ### Testing
 
+- **[questions](./skills/testing/questions/SKILL.md)** — Review a design, API spec, sequence diagram, or requirements document and return at least two pinpointed questions for its authors. Each question cites the document, section or field, and exact quote, says why it matters for testing, offers answer options, and is ranked Blocking, Important, or Minor. Read-only. `/questions`.
 - **[scenario](./skills/testing/scenario/SKILL.md)** — Derive traceable QA scenarios from product designs, API specifications, and sequence diagrams; use independent opinions or debate to examine coverage and ambiguity.
 - **[copigot](./skills/testing/copigot/SKILL.md)** — Severity-tagged QA review of Playwright + TypeScript automation specs (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`/`NIT`) with `file:line` citations and fix snippets. `/copigot`.
 - **[mindmap](./skills/testing/mindmap/SKILL.md)** — QA use-case mind map (`.xmind`) from a feature, user story, or API spec: Validation, Business Scenarios, Security & Edge, Coverage Gaps. Saves a Markdown outline to the repo's `docs/testcases/` and renders the `.xmind` next to it; needs Python 3. `/mindmap`.

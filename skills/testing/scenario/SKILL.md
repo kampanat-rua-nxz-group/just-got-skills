@@ -26,7 +26,7 @@ Turn supplied product and technical documents into evidence-traceable QA scenari
    - Priority or risk, when useful
 
    End with document conflicts, assumptions, unanswered questions, and suggested tests that would distinguish competing interpretations. Mark undocumented expected results as `TBD` and identify the decision owner when the documents indicate one.
-6. **Choose the deliverable with the user’s conventions.** Provide a concise review in chat unless asked to create an artifact. If the user wants a use-case mind map, invoke `mindmap` for its established taxonomy and output format. Do not write into the project or create TestRail/Jira items unless asked.
+6. **Choose the deliverable with the user’s conventions.** Provide a concise review in chat unless asked to create an artifact. If the user wants a use-case mind map, invoke `mindmap` for its established taxonomy and output format. If the user wants only questions for the document authors, invoke `questions`. Do not write into the project or create TestRail/Jira items unless asked.
 
 ## Evidence and safety rules
 

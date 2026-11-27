@@ -9,7 +9,7 @@ GCM_REFERENCE = ROOT / "skills/dev/gcm/REFERENCE.md"
 JIRA_STORY_TASK = ROOT / "skills/dev/story/SKILL.md"
 BUG_TICKET = ROOT / "skills/testing/defect/SKILL.md"
 BUG_TICKET_REFERENCE = ROOT / "skills/testing/defect/REFERENCE.md"
-USECASE_MAP = ROOT / "skills/testing/usecase/SKILL.md"
+USECASE_MAP = ROOT / "skills/testing/mindmap/SKILL.md"
 
 DRAFT_PR_CONTRACT = (
     "never run `git commit`, `git add`, `git push`, or `gh pr create`",
@@ -301,7 +301,7 @@ class UsecaseMapContractTest(unittest.TestCase):
 
     def test_expected_results_are_children_of_sample_input_or_data(self):
         entrypoint = body(USECASE_MAP)
-        reference = (ROOT / "skills/testing/usecase/REFERENCE.md").read_text(encoding="utf-8")
+        reference = (ROOT / "skills/testing/mindmap/REFERENCE.md").read_text(encoding="utf-8")
         self.assertNotIn("- → Success", entrypoint)
         self.assertNotIn("- → Success", reference)
         self.assertIn("- Balance sufficient\n            - Sample data test:", reference)
@@ -310,7 +310,7 @@ class UsecaseMapContractTest(unittest.TestCase):
 
     def test_outline_highlights_scenario_conditions_with_markdown_bold(self):
         entrypoint = body(USECASE_MAP)
-        reference = (ROOT / "skills/testing/usecase/REFERENCE.md").read_text(encoding="utf-8")
+        reference = (ROOT / "skills/testing/mindmap/REFERENCE.md").read_text(encoding="utf-8")
         self.assertIn("`**text**` → highlight a scenario condition", entrypoint)
         self.assertIn("- **Insufficient balance**", reference)
         self.assertNotIn("[!]", entrypoint)
@@ -456,7 +456,7 @@ class RepositoryContractTest(unittest.TestCase):
     README = ROOT / "README.md"
     SKILL_LINKS = (
         "[copigot](./skills/testing/copigot/SKILL.md)",
-        "[usecase](./skills/testing/usecase/SKILL.md)",
+        "[mindmap](./skills/testing/mindmap/SKILL.md)",
         "[defect](./skills/testing/defect/SKILL.md)",
         "[gcm](./skills/dev/gcm/SKILL.md)",
         "[pr](./skills/dev/pr/SKILL.md)",

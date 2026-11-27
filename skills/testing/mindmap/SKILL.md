@@ -1,10 +1,10 @@
 ---
-name: usecase
+name: mindmap
 description: Use when the user asks for a QA use-case map, test-case mind map, scenario coverage, or validation and business-flow coverage for a feature, user story, or API specification.
 argument-hint: "[feature description, user story, or spec]"
 ---
 
-# usecase — QA use-case mind map
+# mindmap — QA use-case mind map
 
 Turn feature requirements into a QA use-case mind map: the agent writes a Markdown outline, then `scripts/md2xmind.py` renders it to `.xmind`.
 

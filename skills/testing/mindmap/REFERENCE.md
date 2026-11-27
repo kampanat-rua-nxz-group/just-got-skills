@@ -1,4 +1,4 @@
-# usecase — Reference
+# mindmap — Reference
 
 Consult for outline examples, rendering errors, or XMind compatibility.
 

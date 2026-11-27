@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Collects the facts a summarize-pr note needs about one pull request. Read-only: it only reads from GitHub.
+# Collects the facts a recap note needs about one pull request. Read-only: it only reads from GitHub.
 # Usage: gather.sh <out-dir> [<PR number, URL or branch>]
 # Without a PR argument it uses the PR of the current branch. A number or branch needs the PR's repo as the
 # working directory; a URL works from anywhere.

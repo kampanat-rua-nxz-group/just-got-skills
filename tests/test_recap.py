@@ -8,7 +8,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILL_DIR = ROOT / "skills/dev/summarize-pr"
+SKILL_DIR = ROOT / "skills/dev/recap"
 SCRIPTS = SKILL_DIR / "scripts"
 
 
@@ -194,7 +194,7 @@ class SkillContractTest(unittest.TestCase):
         text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
         description = next(line for line in text.splitlines() if line.startswith("description:"))
         self.assertIn("Use when the user asks", description)
-        self.assertIn("invokes /summarize-pr", description)
+        self.assertIn("invokes /recap", description)
 
     def test_skill_stays_read_only_toward_github_and_git(self):
         text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")

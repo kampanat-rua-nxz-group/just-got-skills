@@ -1,5 +1,5 @@
 ---
-name: "create-bug-ticket"
+name: "bug"
 description: Use when the user wants to document or file a defect from QA evidence such as text, screenshots, API responses, DevTools output, automation failures, or production monitoring.
 model: sonnet
 ---

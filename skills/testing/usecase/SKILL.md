@@ -1,5 +1,5 @@
 ---
-name: usecase-map
+name: usecase
 description: Use when the user asks for a QA use-case map, test-case mind map, scenario coverage, or validation and business-flow coverage for a feature, user story, or API specification.
 argument-hint: "[feature description, user story, or spec]"
 ---

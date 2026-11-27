@@ -1,10 +1,10 @@
 ---
-name: "draft-pr"
-description: Use when the user asks to draft, write, or improve a pull request title or description from a branch diff, including the /draft-pr trigger.
+name: "pr"
+description: Use when the user asks to draft, write, or improve a pull request title or description from a branch diff, including the /pr trigger.
 model: sonnet
 ---
 
-# draft-pr — pull request title & description generator
+# pr — pull request title & description generator
 
 Create a Conventional-Commit-style pull request title and description from a branch diff. **Read-only — never run `git commit`, `git add`, `git push`, or `gh pr create`.**
 

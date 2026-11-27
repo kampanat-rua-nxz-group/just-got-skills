@@ -1,5 +1,5 @@
 ---
-name: prompt-crafter
+name: prompt
 description: Use when turning a testing brief, requirements, or reference data into a structured prompt for an AI provider, including prompts that request an XMind deliverable.
 ---
 

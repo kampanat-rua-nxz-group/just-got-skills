@@ -1,5 +1,5 @@
 ---
-name: create-jira-story-task
+name: story
 description: Use when the user asks to draft, write, or improve a non-defect Jira Story or Task from requirements, notes, or a feature request.
 ---
 
@@ -13,7 +13,7 @@ Produce a copy-ready Jira work item whose scope and acceptance criteria can be u
 
 - **Story** — delivers an observable user or business outcome.
 - **Task** — technical, operational, research, or maintenance work without a standalone user outcome.
-- **Defect** — invoke `create-bug-ticket` instead and stop this workflow.
+- **Defect** — invoke `bug` instead and stop this workflow.
 
 When Story and Task both seem plausible, use Story only when the request names a beneficiary and outcome; otherwise use Task.
 

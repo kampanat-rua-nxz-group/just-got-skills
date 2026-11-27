@@ -9,7 +9,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "skills/testing/usecase-map/scripts/md2xmind.py"
+SCRIPT = ROOT / "skills/testing/usecase/scripts/md2xmind.py"
 SPEC = importlib.util.spec_from_file_location("md2xmind", SCRIPT)
 assert SPEC is not None
 assert SPEC.loader is not None

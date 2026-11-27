@@ -1,5 +1,5 @@
 ---
-name: spec-to-qa
+name: scenario
 description: Use when deriving or reviewing QA scenarios from product designs, API specifications, sequence diagrams, or related requirements documents.
 ---
 
@@ -26,7 +26,7 @@ Turn supplied product and technical documents into evidence-traceable QA scenari
    - Priority or risk, when useful
 
    End with document conflicts, assumptions, unanswered questions, and suggested tests that would distinguish competing interpretations. Mark undocumented expected results as `TBD` and identify the decision owner when the documents indicate one.
-6. **Choose the deliverable with the user’s conventions.** Provide a concise review in chat unless asked to create an artifact. If the user wants a use-case mind map, use `usecase-map` for its established taxonomy and output format. Do not write into the project or create TestRail/Jira items unless asked.
+6. **Choose the deliverable with the user’s conventions.** Provide a concise review in chat unless asked to create an artifact. If the user wants a use-case mind map, use `usecase` for its established taxonomy and output format. Do not write into the project or create TestRail/Jira items unless asked.
 
 ## Evidence and safety rules
 

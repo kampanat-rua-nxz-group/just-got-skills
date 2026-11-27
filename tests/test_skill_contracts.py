@@ -3,13 +3,13 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DRAFT_PR = ROOT / "skills/dev/draft-pr/SKILL.md"
+DRAFT_PR = ROOT / "skills/dev/pr/SKILL.md"
 GCM = ROOT / "skills/dev/gcm/SKILL.md"
 GCM_REFERENCE = ROOT / "skills/dev/gcm/REFERENCE.md"
-JIRA_STORY_TASK = ROOT / "skills/dev/create-jira-story-task/SKILL.md"
-BUG_TICKET = ROOT / "skills/testing/create-bug-ticket/SKILL.md"
-BUG_TICKET_REFERENCE = ROOT / "skills/testing/create-bug-ticket/REFERENCE.md"
-USECASE_MAP = ROOT / "skills/testing/usecase-map/SKILL.md"
+JIRA_STORY_TASK = ROOT / "skills/dev/story/SKILL.md"
+BUG_TICKET = ROOT / "skills/testing/bug/SKILL.md"
+BUG_TICKET_REFERENCE = ROOT / "skills/testing/bug/REFERENCE.md"
+USECASE_MAP = ROOT / "skills/testing/usecase/SKILL.md"
 
 DRAFT_PR_CONTRACT = (
     "gh pr create",
@@ -208,7 +208,7 @@ class JiraStoryTaskContractTest(unittest.TestCase):
         assert_contains_all(entrypoint, (
             "Story",
             "Task",
-            "create-bug-ticket",
+            "`bug`",
             "TBD",
             "copy-ready",
         ))
@@ -299,7 +299,7 @@ class UsecaseMapContractTest(unittest.TestCase):
 
     def test_expected_results_are_children_of_sample_input_or_data(self):
         entrypoint = body(USECASE_MAP)
-        reference = (ROOT / "skills/testing/usecase-map/REFERENCE.md").read_text(encoding="utf-8")
+        reference = (ROOT / "skills/testing/usecase/REFERENCE.md").read_text(encoding="utf-8")
         self.assertNotIn("- → Success", entrypoint)
         self.assertNotIn("- → Success", reference)
         self.assertIn("- Balance sufficient\n            - Sample data test:", reference)
@@ -308,7 +308,7 @@ class UsecaseMapContractTest(unittest.TestCase):
 
     def test_outline_highlights_scenario_conditions_with_markdown_bold(self):
         entrypoint = body(USECASE_MAP)
-        reference = (ROOT / "skills/testing/usecase-map/REFERENCE.md").read_text(encoding="utf-8")
+        reference = (ROOT / "skills/testing/usecase/REFERENCE.md").read_text(encoding="utf-8")
         self.assertIn("`**text**` → highlight a scenario condition", entrypoint)
         self.assertIn("- **Insufficient balance**", reference)
         self.assertNotIn("[!]", entrypoint)
@@ -316,8 +316,8 @@ class UsecaseMapContractTest(unittest.TestCase):
 
 
 class SpecHawkContractTest(unittest.TestCase):
-    SKILL = ROOT / "skills/testing/spec-hawk/SKILL.md"
-    CHECKLIST = ROOT / "skills/testing/spec-hawk/CHECKLIST.md"
+    SKILL = ROOT / "skills/testing/hawk/SKILL.md"
+    CHECKLIST = ROOT / "skills/testing/hawk/CHECKLIST.md"
     REVIEWER = ROOT / "agents/automation-qa-reviewer.md"
     SHARED_START = "<!-- BEGIN SHARED REVIEW CONTRACT -->"
     SHARED_END = "<!-- END SHARED REVIEW CONTRACT -->"
@@ -365,7 +365,7 @@ class SpecHawkContractTest(unittest.TestCase):
         self.assertEqual(frontmatter(self.SKILL)["description"], (
             "Use when reviewing or auditing Playwright and TypeScript automation "
             "specs, tests, services, models, helpers, or utilities, including "
-            "pre-PR checks and the /spec-hawk trigger."
+            "pre-PR checks and the /hawk trigger."
         ))
 
     def test_entrypoint_retains_nine_areas_and_both_review_branches(self):
@@ -402,12 +402,12 @@ class SpecHawkContractTest(unittest.TestCase):
 class RepositoryContractTest(unittest.TestCase):
     README = ROOT / "README.md"
     SKILL_LINKS = (
-        "[spec-hawk](./skills/testing/spec-hawk/SKILL.md)",
-        "[usecase-map](./skills/testing/usecase-map/SKILL.md)",
-        "[create-bug-ticket](./skills/testing/create-bug-ticket/SKILL.md)",
+        "[hawk](./skills/testing/hawk/SKILL.md)",
+        "[usecase](./skills/testing/usecase/SKILL.md)",
+        "[bug](./skills/testing/bug/SKILL.md)",
         "[gcm](./skills/dev/gcm/SKILL.md)",
-        "[draft-pr](./skills/dev/draft-pr/SKILL.md)",
-        "[create-jira-story-task](./skills/dev/create-jira-story-task/SKILL.md)",
+        "[pr](./skills/dev/pr/SKILL.md)",
+        "[story](./skills/dev/story/SKILL.md)",
     )
 
     def test_readme_documents_catalog_installation_and_validation(self):

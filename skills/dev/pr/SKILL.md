@@ -34,9 +34,9 @@ Create a Conventional-Commit-style pull request title and description from a bra
 
 ## Output format
 
-Output the PR details, not a `gh pr create` command. The user pastes each field into the PR form by hand. Show the draft only after steps 7 and 8 are done. Use this layout, in this order:
+Output the PR details, not a `gh pr create` command. The user pastes each field into the PR form by hand. Show the draft only after step 7 is done. Use this layout, in this order:
 
-1. A details list, one line each: `Base: <detected base>`, `Head: <branch>`, `Draft: yes` (only when the user asked for a draft), `Assignee: me` (omit only if the user said not to), `Reviewers: <logins or none>`. For a stacked PR, add `Stacked on: #<n>`.
+1. A details list, one line each: `Base: <detected base>`, `Head: <branch>`, `Draft: yes` (only when the user asked for a draft), `Assignee: me` (omit only if the user said not to), `Reviewers: <logins the user named, or none>`. For a stacked PR, add `Stacked on: #<n>`.
 2. The title, alone in a fenced block with no language tag. Name the field on the line above the block ("Title").
 3. The body, alone in a fenced block with no language tag, after a line naming the field ("Description"). Make the fence longer than any backtick run inside the body (use four backticks when the body holds a code fence). The body follows the template chosen in step 3. Checklist items carry the state step 7 left them in.
 4. A verification note after the blocks: one line per unticked checklist item, starting `Not verified:` and naming the reason, and one line per failed check with its output. Write `All checklist items verified` when none apply. Nothing else.

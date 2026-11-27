@@ -1,4 +1,4 @@
-# Create Bug Ticket — Reference
+# bug — Reference
 
 Use this file for the environment tables, severity selection, issue types,
 ticket tone, and final quality check referenced by `SKILL.md`.
@@ -95,7 +95,7 @@ ticket tone, and final quality check referenced by `SKILL.md`.
 
 ## Automation-sourced Bugs — Triage Before Filing
 
-Reproduce and confirm (see `debug-mantra`), then triage:
+Reproduce and confirm the failure, then triage:
 
 | Failure source | Where it goes |
 |---|---|

@@ -4,7 +4,7 @@ description: Use when the user asks for a QA use-case map, test-case mind map, s
 argument-hint: "[feature description, user story, or spec]"
 ---
 
-# Use Case Map
+# usecase — QA use-case mind map
 
 Turn feature requirements into a QA use-case mind map: the agent writes a Markdown outline, then `scripts/md2xmind.py` renders it to `.xmind`.
 
@@ -13,7 +13,7 @@ Turn feature requirements into a QA use-case mind map: the agent writes a Markdo
 1. **Gather context** — read the feature description, user story, acceptance criteria, spec, and design doc, including error codes, messages, and limits. Ask only when ambiguity prevents mapping; handle undocumented values as described below.
 2. **Build the map** using the taxonomy below. Put expected-result leaves under each sample input/data test; bold scenario conditions that need attention in the Markdown outline.
 3. **Review coverage** and populate Coverage Gaps from the completed trees. Before saving, check each Business Scenarios and Journey tree against the nesting rule in section 2: no `continue` leaf, no run of gate siblings at one indent, and every gate's passing branch contains the next gate. Also check Journeys: none runs deeper than about 10 levels, a long one is split by phase and numbered, each piece ends on a pointer to the next, and each piece is itself a chain, not one gate over a flat list of outcomes. Fix any tree that fails.
-4. **Save the outline** as plain Markdown at `docs/testcases/<feature>-usecase-map.md` in the project repo. Create the directory if needed; omit frontmatter.
+4. **Save the outline** as plain Markdown at `docs/testcases/<feature>-usecase-map.md` in the project repo. Create the directory if needed; omit frontmatter. Then run `python3 <skill-dir>/scripts/md2xmind.py docs/testcases/<feature>-usecase-map.md --check` and fix the outline until it prints `Nesting OK`. The check catches `continue` leaves, gates listed flat under one parent, and Journeys deeper than 10 levels. It cannot catch a Journey piece that is one gate over a flat list of outcomes, so keep reviewing that by eye.
 5. **Render** the `.xmind` beside the outline. Resolve `<skill-dir>` to the directory containing this loaded `SKILL.md`:
    ```bash
    python3 <skill-dir>/scripts/md2xmind.py docs/testcases/<feature>-usecase-map.md \

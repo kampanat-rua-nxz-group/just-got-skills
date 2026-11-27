@@ -3,7 +3,7 @@ name: scenario
 description: Use when deriving or reviewing QA scenarios from product designs, API specifications, sequence diagrams, or related requirements documents.
 ---
 
-# Spec to QA
+# scenario — QA scenarios from specs
 
 Turn supplied product and technical documents into evidence-traceable QA scenarios. Use independent analysis to broaden coverage and structured debate to resolve a specific uncertainty. The source documents remain authoritative; model agreement is not proof.
 

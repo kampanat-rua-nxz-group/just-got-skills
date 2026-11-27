@@ -37,6 +37,8 @@ ln -s ~/just-got-skills/skills/testing/scenario ~/.claude/skills/scenario
 ln -s ~/just-got-skills/skills/testing/usecase  ~/.claude/skills/usecase
 ln -s ~/just-got-skills/skills/testing/bug      ~/.claude/skills/bug
 ln -s ~/just-got-skills/skills/testing/prompt   ~/.claude/skills/prompt
+ln -s ~/just-got-skills/skills/testing/impact   ~/.claude/skills/impact
+ln -s ~/just-got-skills/skills/testing/tdd      ~/.claude/skills/tdd
 ln -s ~/just-got-skills/skills/dev/gcm          ~/.claude/skills/gcm
 ln -s ~/just-got-skills/skills/dev/pr           ~/.claude/skills/pr
 ln -s ~/just-got-skills/skills/dev/story        ~/.claude/skills/story
@@ -60,6 +62,8 @@ ln -s ~/just-got-skills/skills/dev/recap        ~/.claude/skills/recap
 - **[hawk](./skills/testing/hawk/SKILL.md)** — Severity-tagged QA review of Playwright + TypeScript automation specs (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`/`NIT`) with `file:line` citations and fix snippets. `/hawk`.
 - **[usecase](./skills/testing/usecase/SKILL.md)** — QA use-case mind map (`.xmind`) from a feature, user story, or API spec: Validation, Business Scenarios, Security & Edge, Coverage Gaps. Saves a Markdown outline to the repo's `docs/testcases/` and renders the `.xmind` next to it; needs Python 3. `/usecase`.
 - **[bug](./skills/testing/bug/SKILL.md)** — Turn any QA input (screenshot, API response, DevTools output, automation failure) into a developer-ready Jira bug ticket.
+- **[impact](./skills/testing/impact/SKILL.md)** — What a change, PR, or diff can break outside its own lines. Names the one fact the change is safe because of and proves it by running real code, rates confirmed risks with `file:line`, lists what was cleared, and turns risks into regression checks. Read-only toward the project. `/impact`.
+- **[tdd](./skills/testing/tdd/SKILL.md)** — Turn a confirmed bug into a focused regression test that fails before the fix and passes after it, using the repo's existing test stack. Prefers no new test over a bad one, fixes production code only when asked, and reports failing-before and passing-after output. `/tdd`.
 
 ### Dev
 
@@ -75,4 +79,8 @@ python3 scripts/validate_skills.py .
 python3 -m unittest discover -s tests -v
 ```
 
-The first command checks skill packaging and links. The second protects behavior contracts and the XMind renderer.
+The first command checks skill packaging, links, and references between skills. The second protects behavior contracts and the XMind renderer.
+
+## Credits
+
+`impact` and `tdd` are adapted from the `blast-radius` and `tdd` skills in poteto's [pstack](https://github.com/cursor/plugins/tree/main/pstack) (MIT). The skill-writing and behavior rules in `AGENTS.md` draw on its principles.

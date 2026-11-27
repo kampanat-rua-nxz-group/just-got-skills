@@ -4,7 +4,7 @@ description: Use when reviewing or auditing Playwright and TypeScript automation
 argument-hint: "[file-or-folder path]"
 ---
 
-# Spec Hawk
+# hawk — Playwright automation review
 
 Review Playwright + TypeScript automation in read-only mode. Discover the repo's conventions, then apply the nine-area checklist: layout, tagging/test-management, schema validation, code quality, linting, naming, duplication, function complexity, and race-prone shared test data. Return severity-tagged findings with file:line citations and TypeScript fix snippets.
 

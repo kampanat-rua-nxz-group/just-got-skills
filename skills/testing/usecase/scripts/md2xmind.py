@@ -16,6 +16,7 @@ Outline conventions:
 
 Usage:
     python3 md2xmind.py outline.md -o output.xmind
+    python3 md2xmind.py outline.md --check     # nesting lint only, no output
 """
 
 import argparse
@@ -148,6 +149,49 @@ def parse_outline(text):
     return root
 
 
+CONTINUE_LEAF_RE = re.compile(r"\bcontinue$", re.IGNORECASE)
+MAX_JOURNEY_DEPTH = 10
+
+
+def lint_outline(root):
+    """Return nesting problems in Business Scenarios and Journey trees.
+
+    Flags a `continue` leaf, two or more gates (titles ending in "?") under one
+    parent, and a Journey deeper than MAX_JOURNEY_DEPTH levels.
+    """
+    problems = []
+
+    def depth(topic):
+        return 1 + max((depth(child) for child in topic.children), default=0)
+
+    def walk(topic, path):
+        gates = [child.title for child in topic.children if child.title.endswith("?")]
+        if len(gates) > 1:
+            problems.append(
+                f"{path}: gates listed flat under one parent; nest each gate "
+                f"inside the previous gate's passing branch: {gates}"
+            )
+        for child in topic.children:
+            child_path = f"{path} > {child.title}"
+            if not child.children and CONTINUE_LEAF_RE.search(child.title):
+                problems.append(
+                    f"{child_path}: 'continue' leaf; make the passing condition a "
+                    "node and nest the next gate inside it"
+                )
+            walk(child, child_path)
+
+    for branch in root.children:
+        title = branch.title
+        if title.startswith("Business Scenarios") or title.startswith("Journey:"):
+            walk(branch, title)
+        if title.startswith("Journey:") and depth(branch) - 1 > MAX_JOURNEY_DEPTH:
+            problems.append(
+                f"{title}: {depth(branch) - 1} levels deep; split it by phase into "
+                f"numbered Journeys of at most {MAX_JOURNEY_DEPTH} levels"
+            )
+    return problems
+
+
 def new_id():
     return str(uuid.uuid4())
 
@@ -218,8 +262,14 @@ def main():
     description = (__doc__ or "Convert a Markdown outline to an XMind file.").splitlines()[0]
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument("outline", help="Markdown outline file")
-    parser.add_argument("-o", "--output", required=True, help="Output .xmind path")
+    parser.add_argument("-o", "--output", help="Output .xmind path")
+    parser.add_argument(
+        "--check", action="store_true",
+        help="Lint Business Scenarios and Journey nesting; write nothing",
+    )
     args = parser.parse_args()
+    if not args.check and not args.output:
+        parser.error("-o/--output is required unless --check is given")
 
     try:
         with open(args.outline, encoding="utf-8") as fh:
@@ -227,6 +277,17 @@ def main():
     except (OSError, ValueError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         sys.exit(1)
+
+    problems = lint_outline(root)
+    if args.check:
+        for problem in problems:
+            print(f"Nesting: {problem}", file=sys.stderr)
+        if problems:
+            sys.exit(1)
+        print(f"Nesting OK: {args.outline}")
+        return
+    for problem in problems:
+        print(f"Warning: {problem}", file=sys.stderr)
 
     content = build_content_json(root)
     try:

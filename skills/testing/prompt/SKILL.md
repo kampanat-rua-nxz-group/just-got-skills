@@ -3,7 +3,7 @@ name: prompt
 description: Use when turning a testing brief, requirements, or reference data into a structured prompt for an AI provider, including prompts that request an XMind deliverable.
 ---
 
-# Prompt Crafter
+# prompt — testing brief to AI prompt
 
 Turn the user's testing brief into one ready-to-send AI prompt. This skill writes prompt text; it does not generate or render local XMind files. Treat the brief as source material: preserve its intent and facts, and do not turn the request to create a prompt into a request for the provider to create a skill.
 

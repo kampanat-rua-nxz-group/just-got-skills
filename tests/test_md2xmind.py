@@ -186,6 +186,76 @@ class Md2XmindTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, r"Line 2"):
             md2xmind.parse_outline("# Root\nplain text\n")
 
+    FLAT_SCENARIOS = """# Withdrawals
+## Business Scenarios
+- Submit withdrawal
+  - Authenticated?
+    - Invalid key
+      - HTTP Status 401
+    - authenticated → continue
+  - Balance sufficient?
+    - Insufficient
+      - HTTP Status 400
+    - Balance sufficient → Success
+      - HTTP Status 200
+## Open Questions / Notes
+- Is the minimum per currency?
+- Who owns the fee table?
+"""
+
+    NESTED_SCENARIOS = """# Withdrawals
+## Business Scenarios
+- Submit withdrawal
+  - Authenticated?
+    - Invalid key
+      - HTTP Status 401
+    - Authenticated
+      - Balance sufficient?
+        - Insufficient
+          - HTTP Status 400
+        - Balance sufficient → Success
+          - HTTP Status 200
+## Journey: Withdraw (1 of 2) — Submit
+- Submitted
+  - Committed → continues in Journey 2 (Send)
+"""
+
+    def test_lint_flags_flat_gates_and_continue_leaves_only_in_scenario_trees(self):
+        problems = md2xmind.lint_outline(md2xmind.parse_outline(self.FLAT_SCENARIOS))
+
+        self.assertEqual(len(problems), 2, problems)
+        self.assertIn("gates listed flat", problems[0])
+        self.assertIn("'continue' leaf", problems[1])
+
+    def test_lint_accepts_nested_chain_and_journey_pointer_leaf(self):
+        root = md2xmind.parse_outline(self.NESTED_SCENARIOS)
+
+        self.assertEqual(md2xmind.lint_outline(root), [])
+
+    def test_lint_flags_journey_deeper_than_limit(self):
+        lines = ["# Flow", "## Journey: Long"]
+        lines += [f"{'  ' * level}- step {level}" for level in range(12)]
+        problems = md2xmind.lint_outline(md2xmind.parse_outline("\n".join(lines)))
+
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("12 levels deep", problems[0])
+
+    def test_cli_check_fails_on_flat_outline_without_writing(self):
+        with TemporaryDirectory() as directory:
+            outline = Path(directory) / "flat.md"
+            outline.write_text(self.FLAT_SCENARIOS, encoding="utf-8")
+
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), str(outline), "--check"],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("Nesting: Business Scenarios > Submit withdrawal", result.stderr)
+            self.assertEqual(sorted(p.name for p in Path(directory).iterdir()), ["flat.md"])
+
 
 if __name__ == "__main__":
     unittest.main()

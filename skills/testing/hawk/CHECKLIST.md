@@ -1,4 +1,4 @@
-# Spec Hawk — Review Checklist (inline-fallback copy)
+# hawk — Review Checklist (inline-fallback copy)
 
 Used by SKILL.md Step 2 when the dedicated reviewer is unavailable.
 **Keep the marked contract exactly synchronized with `agents/automation-qa-reviewer.md`; each artifact is independently installable.**

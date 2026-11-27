@@ -1,4 +1,4 @@
-# Use Case Map — Reference
+# usecase — Reference
 
 Consult for outline examples, rendering errors, or XMind compatibility.
 

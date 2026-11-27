@@ -3,7 +3,7 @@ name: story
 description: Use when the user asks to draft, write, or improve a non-defect Jira Story or Task from requirements, notes, or a feature request.
 ---
 
-# Create Jira Story or Task
+# story — Jira Story or Task
 
 Produce a copy-ready Jira work item whose scope and acceptance criteria can be understood without follow-up. Preserve unknowns instead of inventing requirements.
 

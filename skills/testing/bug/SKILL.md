@@ -4,7 +4,7 @@ description: Use when the user wants to document or file a defect from QA eviden
 model: sonnet
 ---
 
-# Create Bug Ticket
+# bug — Jira bug ticket from QA evidence
 
 Produce a developer-ready English Jira bug ticket that a developer can reproduce and fix without follow-up.
 
@@ -17,7 +17,7 @@ Produce a developer-ready English Jira bug ticket that a developer can reproduce
 
 **Step 0a — Confirm an automation-sourced defect:**
 
-Invoke `debug-mantra`, then:
+Reproduce the failure yourself before drafting:
 
 1. Run the failing test and capture the actual error or stack verbatim.
 2. Record whether it is deterministic or intermittent; include the observed rate in Frequency.
@@ -56,3 +56,5 @@ Continue only with a confirmed product defect. Flaky / selector / test-data / st
 10. **QA Note** — a `> **QA Note:**` block (no emoji) covering regression scenarios, edge cases, and related components.
 
 Before presenting, apply [Tone Contract](REFERENCE.md#tone-contract) and complete its [Quality Checklist](REFERENCE.md#quality-checklist).
+
+After presenting the ticket, offer to lock the confirmed defect in a regression test; if the user accepts, invoke `tdd` with the ticket.

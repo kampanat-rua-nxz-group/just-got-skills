@@ -87,9 +87,24 @@ class SkillRepositoryValidationTest(unittest.TestCase):
             errors = "\n".join(validate_repository(root))
             self.assertIn("missing closing frontmatter boundary", errors)
 
-    def test_current_repository_has_six_discoverable_skills(self):
+    def test_reports_invoked_skill_missing_from_repository(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_skill(
+                root,
+                "example-skill",
+                "---\nname: example-skill\ndescription: Use when reviewing examples.\n---\n"
+                "Invoke `missing-skill`, then apply the `example-skill` skill.\n",
+            )
+
+            errors = "\n".join(validate_repository(root))
+
+            self.assertIn("unknown skill reference 'missing-skill'", errors)
+            self.assertNotIn("'example-skill'", errors)
+
+    def test_current_repository_has_eleven_discoverable_skills(self):
         skill_files = sorted(ROOT.glob("skills/*/*/SKILL.md"))
-        self.assertEqual(9, len(skill_files))
+        self.assertEqual(11, len(skill_files))
 
 
 if __name__ == "__main__":

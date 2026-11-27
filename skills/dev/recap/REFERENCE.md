@@ -1,4 +1,4 @@
-# recap reference
+# recap — Reference
 
 Loaded from `SKILL.md` steps 2–6. Sections: note template, content rules, updating a note, pre-flight.
 

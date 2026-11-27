@@ -12,12 +12,14 @@ BUG_TICKET_REFERENCE = ROOT / "skills/testing/bug/REFERENCE.md"
 USECASE_MAP = ROOT / "skills/testing/usecase/SKILL.md"
 
 DRAFT_PR_CONTRACT = (
-    "gh pr create",
+    "never run `git commit`, `git add`, `git push`, or `gh pr create`",
     "## Summary",
     "## Test plan",
-    "--base",
-    "--title",
-    "--body",
+    "Base: <detected base>",
+    "Head: <branch>",
+    "Title",
+    "Description",
+    "Not verified:",
     "git log",
     "git diff",
 )
@@ -399,6 +401,57 @@ class SpecHawkContractTest(unittest.TestCase):
         ))
 
 
+class ImpactContractTest(unittest.TestCase):
+    SKILL = ROOT / "skills/testing/impact/SKILL.md"
+
+    def test_description_is_trigger_focused(self):
+        description = frontmatter(self.SKILL)["description"]
+        self.assertTrue(description.startswith("Use when"))
+        self.assertIn("/impact", description)
+
+    def test_entrypoint_proves_the_safety_fact_and_stays_read_only(self):
+        entrypoint = body(self.SKILL)
+        assert_contains_all(entrypoint, (
+            "## Evidence levels",
+            "**Asserted**", "**Cited**", "**Reasoned**", "**Run**", "**Reproduced**",
+            "**Name the safety fact.**",
+            "**Prove the safety fact.**",
+            "Never invent a caller or an API.",
+            "read-only toward the project",
+            "`unproven`",
+            "**Cleared**",
+            "**Regression checks**",
+            "**Not checked**",
+        ))
+
+
+class TddContractTest(unittest.TestCase):
+    SKILL = ROOT / "skills/testing/tdd/SKILL.md"
+
+    def test_description_is_trigger_focused(self):
+        description = frontmatter(self.SKILL)["description"]
+        self.assertTrue(description.startswith("Use when"))
+        self.assertIn("/tdd", description)
+
+    def test_entrypoint_keeps_fail_first_order_and_guardrails(self):
+        entrypoint = body(self.SKILL)
+        steps = (
+            "**Write the failing test first.**",
+            "**Run it before any fix.**",
+            "**Fix only when the user asked for the fix.**",
+            "**Rerun the regression test and the nearby tests.**",
+        )
+        positions = [entrypoint.index(step) for step in steps]
+        self.assertEqual(positions, sorted(positions))
+        assert_contains_all(entrypoint, (
+            "Prefer no new test over a bad test.",
+            "fail for the intended reason",
+            "Never change a test to match a wrong implementation.",
+            "**Failing before**",
+            "**Passing after**",
+        ))
+
+
 class RepositoryContractTest(unittest.TestCase):
     README = ROOT / "README.md"
     SKILL_LINKS = (
@@ -408,6 +461,8 @@ class RepositoryContractTest(unittest.TestCase):
         "[gcm](./skills/dev/gcm/SKILL.md)",
         "[pr](./skills/dev/pr/SKILL.md)",
         "[story](./skills/dev/story/SKILL.md)",
+        "[impact](./skills/testing/impact/SKILL.md)",
+        "[tdd](./skills/testing/tdd/SKILL.md)",
     )
 
     def test_readme_documents_catalog_installation_and_validation(self):

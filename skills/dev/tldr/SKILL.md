@@ -2,6 +2,7 @@
 name: tldr
 description: Use when the user asks to summarize a pull request into the Obsidian vault, write or update a PR review note, or invokes /tldr.
 argument-hint: "[PR number, URL or branch; default: the PR of the current branch]"
+disable-model-invocation: true
 ---
 
 # tldr — PR summary note for reviewers

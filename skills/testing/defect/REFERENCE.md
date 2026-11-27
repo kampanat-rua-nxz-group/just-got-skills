@@ -1,4 +1,4 @@
-# bug — Reference
+# defect — Reference
 
 Use this file for the environment tables, severity selection, issue types,
 ticket tone, and final quality check referenced by `SKILL.md`.

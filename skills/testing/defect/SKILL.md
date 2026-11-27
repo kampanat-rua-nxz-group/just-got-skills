@@ -1,10 +1,10 @@
 ---
-name: "bug"
+name: "defect"
 description: Use when the user wants to document or file a defect from QA evidence such as text, screenshots, API responses, DevTools output, automation failures, or production monitoring.
 model: sonnet
 ---
 
-# bug — Jira bug ticket from QA evidence
+# defect — Jira bug ticket from QA evidence
 
 Produce a developer-ready English Jira bug ticket that a developer can reproduce and fix without follow-up.
 

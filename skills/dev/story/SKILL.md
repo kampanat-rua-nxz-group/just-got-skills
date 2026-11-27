@@ -13,7 +13,7 @@ Produce a copy-ready Jira work item whose scope and acceptance criteria can be u
 
 - **Story** — delivers an observable user or business outcome.
 - **Task** — technical, operational, research, or maintenance work without a standalone user outcome.
-- **Defect** — invoke `bug` instead and stop this workflow.
+- **Defect** — invoke `defect` instead and stop this workflow.
 
 When Story and Task both seem plausible, use Story only when the request names a beneficiary and outcome; otherwise use Task.
 

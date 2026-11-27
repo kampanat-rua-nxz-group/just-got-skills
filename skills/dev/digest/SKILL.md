@@ -1,10 +1,10 @@
 ---
-name: recap
-description: Use when the user asks to summarize a pull request into the Obsidian vault, write or update a PR review note, or invokes /recap.
+name: digest
+description: Use when the user asks to summarize a pull request into the Obsidian vault, write or update a PR review note, or invokes /digest.
 argument-hint: "[PR number, URL or branch; default: the PR of the current branch]"
 ---
 
-# recap — PR summary note for the vault
+# digest — PR summary note for the vault
 
 Write one Markdown note that gives a QA lead the direction of a pull request without reading all of its code: what changed and why, the contracts between the moving parts, what the tests now prove, and where the risk sits. The note lives in the Obsidian vault next to the project it belongs to.
 

@@ -7,8 +7,8 @@ DRAFT_PR = ROOT / "skills/dev/pr/SKILL.md"
 GCM = ROOT / "skills/dev/gcm/SKILL.md"
 GCM_REFERENCE = ROOT / "skills/dev/gcm/REFERENCE.md"
 JIRA_STORY_TASK = ROOT / "skills/dev/story/SKILL.md"
-BUG_TICKET = ROOT / "skills/testing/bug/SKILL.md"
-BUG_TICKET_REFERENCE = ROOT / "skills/testing/bug/REFERENCE.md"
+BUG_TICKET = ROOT / "skills/testing/defect/SKILL.md"
+BUG_TICKET_REFERENCE = ROOT / "skills/testing/defect/REFERENCE.md"
 USECASE_MAP = ROOT / "skills/testing/usecase/SKILL.md"
 
 DRAFT_PR_CONTRACT = (
@@ -210,7 +210,7 @@ class JiraStoryTaskContractTest(unittest.TestCase):
         assert_contains_all(entrypoint, (
             "Story",
             "Task",
-            "`bug`",
+            "`defect`",
             "TBD",
             "copy-ready",
         ))
@@ -457,7 +457,7 @@ class RepositoryContractTest(unittest.TestCase):
     SKILL_LINKS = (
         "[hawk](./skills/testing/hawk/SKILL.md)",
         "[usecase](./skills/testing/usecase/SKILL.md)",
-        "[bug](./skills/testing/bug/SKILL.md)",
+        "[defect](./skills/testing/defect/SKILL.md)",
         "[gcm](./skills/dev/gcm/SKILL.md)",
         "[pr](./skills/dev/pr/SKILL.md)",
         "[story](./skills/dev/story/SKILL.md)",

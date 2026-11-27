@@ -1,7 +1,7 @@
 ---
 name: tdd
 description: Use when the user asks for TDD, a failing test first, or a regression test for a confirmed bug, or when a confirmed bug has a cheap local test path, including the /tdd trigger.
-argument-hint: "[bug ticket, failing behavior, or test path]"
+argument-hint: "[defect ticket, failing behavior, or test path]"
 ---
 
 # tdd — failing test first
@@ -16,7 +16,7 @@ A bad test mostly tests mocks, encodes implementation details, depends on timing
 
 ## Workflow
 
-1. **Understand the bug.** State the intended behavior, the current behavior, the affected path, and the smallest observable reproduction. When the input is a `bug` ticket, use its Steps to Reproduce, Expected Result, and Actual Result.
+1. **Understand the bug.** State the intended behavior, the current behavior, the affected path, and the smallest observable reproduction. When the input is a ticket from the `defect` skill, use its Steps to Reproduce, Expected Result, and Actual Result.
 2. **Choose the narrowest check the repo already uses** for that path: unit, component, API, integration, or Playwright. Follow the repo's existing test layout, naming, tags, and fixtures. Do not add a new framework.
 3. **Write the failing test first.** Assert what users can observe, such as response fields, UI state, or stored data, not internals.
 4. **Run it before any fix.** It must fail for the intended reason: the assertion that encodes the bug. When it passes, or fails on setup, a selector, or test data, fix the test before touching production code.

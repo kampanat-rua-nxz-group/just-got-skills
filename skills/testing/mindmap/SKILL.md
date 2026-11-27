@@ -155,6 +155,7 @@ Use a visible `## Open Questions / Notes` parent with ordinary bullet children f
 Place this branch last. List every:
 
 - **`@TBD` / `TBD` forks** — forks with undocumented values
+- **`@observed` forks** — results taken from the service code or a live call, awaiting design confirmation
 - **Skipped gates** — gates recorded in Open Questions / Notes
 - **Continuation with no fail fork** — passing branches without failure siblings
 
@@ -176,6 +177,8 @@ Write each expected assertion from the design doc as a separate leaf under its s
 
 Use `TBD` for undocumented result fields and tag the affected fork `@TBD`. If the code is known but the message is not, only the message becomes `TBD`.
 
+To fill `TBD` results from the service's source code or a real API call, invoke `probe`.
+
 Omit `UC-V1`-style ID prefixes.
 
 ## Automation labels
@@ -184,6 +187,7 @@ Omit `UC-V1`-style ID prefixes.
 - `@nondeterministic` — trigger cannot be forced; record the invariant and repeat strategy under Open Questions / Notes
 - `@manual` — unsafe or impossible to automate
 - `@TBD` — behavior is undefined; write the test and mark it skipped until the contract is defined
+- `@observed` — the result comes from the service code or a live call, not the design; confirm it with the design owner
 
 ## Outline conventions
 

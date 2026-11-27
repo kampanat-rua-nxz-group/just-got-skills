@@ -261,6 +261,7 @@ class UsecaseMapContractTest(unittest.TestCase):
     )
     COVERAGE_GAPS = (
         "`@TBD` / `TBD` forks",
+        "`@observed` forks",
         "Skipped gates",
         "Continuation with no fail fork",
     )
@@ -269,6 +270,7 @@ class UsecaseMapContractTest(unittest.TestCase):
         "`@nondeterministic`",
         "`@manual`",
         "`@TBD`",
+        "`@observed`",
     )
 
     def test_description_is_trigger_focused_and_runtime_neutral(self):
@@ -463,6 +465,7 @@ class RepositoryContractTest(unittest.TestCase):
         "[story](./skills/dev/story/SKILL.md)",
         "[impact](./skills/testing/impact/SKILL.md)",
         "[tdd](./skills/testing/tdd/SKILL.md)",
+        "[probe](./skills/testing/probe/SKILL.md)",
     )
 
     def test_readme_documents_catalog_installation_and_validation(self):

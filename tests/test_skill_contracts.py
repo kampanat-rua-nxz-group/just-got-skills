@@ -317,9 +317,9 @@ class UsecaseMapContractTest(unittest.TestCase):
         self.assertNotIn("[!]", reference)
 
 
-class SpecHawkContractTest(unittest.TestCase):
-    SKILL = ROOT / "skills/testing/hawk/SKILL.md"
-    CHECKLIST = ROOT / "skills/testing/hawk/CHECKLIST.md"
+class CopigotContractTest(unittest.TestCase):
+    SKILL = ROOT / "skills/testing/copigot/SKILL.md"
+    CHECKLIST = ROOT / "skills/testing/copigot/CHECKLIST.md"
     REVIEWER = ROOT / "agents/automation-qa-reviewer.md"
     SHARED_START = "<!-- BEGIN SHARED REVIEW CONTRACT -->"
     SHARED_END = "<!-- END SHARED REVIEW CONTRACT -->"
@@ -367,7 +367,7 @@ class SpecHawkContractTest(unittest.TestCase):
         self.assertEqual(frontmatter(self.SKILL)["description"], (
             "Use when reviewing or auditing Playwright and TypeScript automation "
             "specs, tests, services, models, helpers, or utilities, including "
-            "pre-PR checks and the /hawk trigger."
+            "pre-PR checks and the /copigot trigger."
         ))
 
     def test_entrypoint_retains_nine_areas_and_both_review_branches(self):
@@ -455,7 +455,7 @@ class TddContractTest(unittest.TestCase):
 class RepositoryContractTest(unittest.TestCase):
     README = ROOT / "README.md"
     SKILL_LINKS = (
-        "[hawk](./skills/testing/hawk/SKILL.md)",
+        "[copigot](./skills/testing/copigot/SKILL.md)",
         "[usecase](./skills/testing/usecase/SKILL.md)",
         "[defect](./skills/testing/defect/SKILL.md)",
         "[gcm](./skills/dev/gcm/SKILL.md)",

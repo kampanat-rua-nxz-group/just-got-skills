@@ -25,9 +25,9 @@ The name is the handle a user types after `/`. The description carries the meani
 
 1. **Use one lowercase word.** Letters and digits only, no hyphen: `defect`, `impact`, `tdd`. The validator enforces this.
 2. **Name what the skill hands back or does.**
-   - It produces an artifact: use the artifact's noun, such as `defect`, `story`, `pr`, or `prompt`. Do not add a verb such as `create-`, `draft-`, or `to-`.
+   - It produces an artifact: use the artifact's noun, such as `defect`, `story`, `pr`, or `digest`. Do not add a verb such as `create-`, `draft-`, or `to-`.
    - It runs a practice: use the term a QA engineer or developer says out loud, such as `tdd`, `impact`, or `scenario`.
-   - Use a nickname such as `hawk` only when the plain word is taken or too generic. The description must then say what the skill does.
+   - Use a nickname such as `copigot` only when the plain word is taken or too generic. The description must then say what the skill does.
 3. **Prefer a standard term to an invented one.** Use an abbreviation only when people in the field know it, such as `tdd`, `pr`, or `qa`.
 4. **Never take a reserved name.** [`scripts/reserved_skill_names.txt`](scripts/reserved_skill_names.txt) lists runtime commands and bundled skills, such as `bug`, `recap`, `review`, and `init`. The runtime runs its own command first, so a skill with a reserved name is never reached by its trigger. The validator enforces this. Refresh the list when a runtime adds commands.
 5. **Reuse a name from another skill set only for the same job.** Users may install poteto's pstack or mattpocock/skills next to this repo. `tdd` and `pr` match their jobs there. Never give one of their names to a different job.

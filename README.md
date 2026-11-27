@@ -32,11 +32,10 @@ Over HTTPS instead: `GITHUB_TOKEN=ghp_xxx npx skills add kampanat-rua-nxz-group/
 
 ```bash
 git clone git@github.com:kampanat-rua-nxz-group/just-got-skills.git ~/just-got-skills
-ln -s ~/just-got-skills/skills/testing/hawk     ~/.claude/skills/hawk
+ln -s ~/just-got-skills/skills/testing/copigot  ~/.claude/skills/copigot
 ln -s ~/just-got-skills/skills/testing/scenario ~/.claude/skills/scenario
 ln -s ~/just-got-skills/skills/testing/usecase  ~/.claude/skills/usecase
 ln -s ~/just-got-skills/skills/testing/defect   ~/.claude/skills/defect
-ln -s ~/just-got-skills/skills/testing/prompt   ~/.claude/skills/prompt
 ln -s ~/just-got-skills/skills/testing/impact   ~/.claude/skills/impact
 ln -s ~/just-got-skills/skills/testing/tdd      ~/.claude/skills/tdd
 ln -s ~/just-got-skills/skills/dev/gcm          ~/.claude/skills/gcm
@@ -47,19 +46,18 @@ ln -s ~/just-got-skills/skills/dev/digest       ~/.claude/skills/digest
 
 `git pull` in `~/just-got-skills` then updates every linked skill in place.
 
-> **`hawk` also needs its subagent** — the `skills` CLI installs skills, not agents:
+> **`copigot` also needs its subagent** — the `skills` CLI installs skills, not agents:
 > ```bash
 > cp agents/automation-qa-reviewer.md ~/.claude/agents/
 > ```
-> Without it, `hawk` falls back to running the same checklist inline (the full checklist ships with the skill as `CHECKLIST.md`).
+> Without it, `copigot` falls back to running the same checklist inline (the full checklist ships with the skill as `CHECKLIST.md`).
 
 ## Reference
 
 ### Testing
 
-- **[prompt](./skills/testing/prompt/SKILL.md)** — Turn a testing brief, requirements, and reference data into a structured, ready-to-send prompt for an AI provider.
 - **[scenario](./skills/testing/scenario/SKILL.md)** — Derive traceable QA scenarios from product designs, API specifications, and sequence diagrams; use independent opinions or debate to examine coverage and ambiguity.
-- **[hawk](./skills/testing/hawk/SKILL.md)** — Severity-tagged QA review of Playwright + TypeScript automation specs (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`/`NIT`) with `file:line` citations and fix snippets. `/hawk`.
+- **[copigot](./skills/testing/copigot/SKILL.md)** — Severity-tagged QA review of Playwright + TypeScript automation specs (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`/`NIT`) with `file:line` citations and fix snippets. `/copigot`.
 - **[usecase](./skills/testing/usecase/SKILL.md)** — QA use-case mind map (`.xmind`) from a feature, user story, or API spec: Validation, Business Scenarios, Security & Edge, Coverage Gaps. Saves a Markdown outline to the repo's `docs/testcases/` and renders the `.xmind` next to it; needs Python 3. `/usecase`.
 - **[defect](./skills/testing/defect/SKILL.md)** — Turn any QA input (screenshot, API response, DevTools output, automation failure) into a developer-ready Jira bug ticket.
 - **[impact](./skills/testing/impact/SKILL.md)** — What a change, PR, or diff can break outside its own lines. Names the one fact the change is safe because of and proves it by running real code, rates confirmed risks with `file:line`, lists what was cleared, and turns risks into regression checks. Read-only toward the project. `/impact`.

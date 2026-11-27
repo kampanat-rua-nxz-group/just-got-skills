@@ -117,9 +117,9 @@ class SkillRepositoryValidationTest(unittest.TestCase):
             self.assertIn("skill name 'two-words' is not one lowercase word", errors)
             self.assertIn("skill name 'bug' is a runtime command or bundled skill", errors)
 
-    def test_current_repository_has_eleven_discoverable_skills(self):
+    def test_current_repository_has_ten_discoverable_skills(self):
         skill_files = sorted(ROOT.glob("skills/*/*/SKILL.md"))
-        self.assertEqual(11, len(skill_files))
+        self.assertEqual(10, len(skill_files))
 
 
 if __name__ == "__main__":

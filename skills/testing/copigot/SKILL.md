@@ -1,10 +1,10 @@
 ---
-name: hawk
-description: Use when reviewing or auditing Playwright and TypeScript automation specs, tests, services, models, helpers, or utilities, including pre-PR checks and the /hawk trigger.
+name: copigot
+description: Use when reviewing or auditing Playwright and TypeScript automation specs, tests, services, models, helpers, or utilities, including pre-PR checks and the /copigot trigger.
 argument-hint: "[file-or-folder path]"
 ---
 
-# hawk — Playwright automation review
+# copigot — Playwright automation review
 
 Review Playwright + TypeScript automation in read-only mode. Discover the repo's conventions, then apply the nine-area checklist: layout, tagging/test-management, schema validation, code quality, linting, naming, duplication, function complexity, and race-prone shared test data. Return severity-tagged findings with file:line citations and TypeScript fix snippets.
 
@@ -18,7 +18,7 @@ Accept **any** file or folder path the user passes — do not require it to matc
 - A file path: a spec, test, service, model, helper, or utility, wherever it lives in the repo
 - A folder: any directory containing automation code
 - A diff description: `"the new sweep transaction spec"`
-- No args: ask the user "Which file or folder should hawk review?"
+- No args: ask the user "Which file or folder should copigot review?"
 
 > **Recommended layout (not required):** the ideal spec path is
 > `testCases/<domain>/<feature>/<feature>.business.spec.ts`. If the target follows

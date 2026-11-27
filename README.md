@@ -39,7 +39,6 @@ ln -s ~/just-got-skills/skills/testing/mindmap   ~/.claude/skills/mindmap
 ln -s ~/just-got-skills/skills/testing/probe     ~/.claude/skills/probe
 ln -s ~/just-got-skills/skills/testing/defect    ~/.claude/skills/defect
 ln -s ~/just-got-skills/skills/testing/impact    ~/.claude/skills/impact
-ln -s ~/just-got-skills/skills/testing/tdd       ~/.claude/skills/tdd
 ln -s ~/just-got-skills/skills/dev/gcm           ~/.claude/skills/gcm
 ln -s ~/just-got-skills/skills/dev/pr            ~/.claude/skills/pr
 ln -s ~/just-got-skills/skills/dev/story         ~/.claude/skills/story
@@ -65,7 +64,6 @@ ln -s ~/just-got-skills/skills/dev/tldr          ~/.claude/skills/tldr
 - **[probe](./skills/testing/probe/SKILL.md)** — Fill `TBD`/`TBC` expected results, such as an error status, code, or message, from the service's source code or a real API call on a test environment. Reads the code path first, runs a control call before any probe, cites `file:line` or the environment, and marks each value `@observed` for the design owner to confirm. Needs Python 3. `/probe`.
 - **[defect](./skills/testing/defect/SKILL.md)** — Turn any QA input (screenshot, API response, DevTools output, automation failure) into a developer-ready Jira bug ticket.
 - **[impact](./skills/testing/impact/SKILL.md)** — What a change, PR, or diff can break outside its own lines. Names the one fact the change is safe because of and proves it by running real code, rates confirmed risks with `file:line`, lists what was cleared, and turns risks into regression checks. Read-only toward the project. `/impact`.
-- **[tdd](./skills/testing/tdd/SKILL.md)** — Turn a confirmed bug into a focused regression test that fails before the fix and passes after it, using the repo's existing test stack. Prefers no new test over a bad one, fixes production code only when asked, and reports failing-before and passing-after output. `/tdd`.
 
 ### Dev
 
@@ -85,4 +83,4 @@ The first command checks skill packaging, links, references between skills, and 
 
 ## Credits
 
-`impact` and `tdd` are adapted from the `blast-radius` and `tdd` skills in poteto's [pstack](https://github.com/cursor/plugins/tree/main/pstack) (MIT). The skill-writing and behavior rules in `AGENTS.md` draw on its principles.
+`impact` is adapted from the `blast-radius` skill in poteto's [pstack](https://github.com/cursor/plugins/tree/main/pstack) (MIT). The skill-writing and behavior rules in `AGENTS.md` draw on its principles.

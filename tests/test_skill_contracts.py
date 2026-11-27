@@ -427,33 +427,6 @@ class ImpactContractTest(unittest.TestCase):
         ))
 
 
-class TddContractTest(unittest.TestCase):
-    SKILL = ROOT / "skills/testing/tdd/SKILL.md"
-
-    def test_description_is_trigger_focused(self):
-        description = frontmatter(self.SKILL)["description"]
-        self.assertTrue(description.startswith("Use when"))
-        self.assertIn("/tdd", description)
-
-    def test_entrypoint_keeps_fail_first_order_and_guardrails(self):
-        entrypoint = body(self.SKILL)
-        steps = (
-            "**Write the failing test first.**",
-            "**Run it before any fix.**",
-            "**Fix only when the user asked for the fix.**",
-            "**Rerun the regression test and the nearby tests.**",
-        )
-        positions = [entrypoint.index(step) for step in steps]
-        self.assertEqual(positions, sorted(positions))
-        assert_contains_all(entrypoint, (
-            "Prefer no new test over a bad test.",
-            "fail for the intended reason",
-            "Never change a test to match a wrong implementation.",
-            "**Failing before**",
-            "**Passing after**",
-        ))
-
-
 class QuestionsContractTest(unittest.TestCase):
     SKILL = ROOT / "skills/testing/questions/SKILL.md"
 
@@ -488,7 +461,6 @@ class RepositoryContractTest(unittest.TestCase):
         "[pr](./skills/dev/pr/SKILL.md)",
         "[story](./skills/dev/story/SKILL.md)",
         "[impact](./skills/testing/impact/SKILL.md)",
-        "[tdd](./skills/testing/tdd/SKILL.md)",
         "[probe](./skills/testing/probe/SKILL.md)",
         "[questions](./skills/testing/questions/SKILL.md)",
     )

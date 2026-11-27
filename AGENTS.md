@@ -23,14 +23,14 @@ This repository contains reusable, runtime-neutral agent skills maintained by Go
 
 The name is the handle a user types after `/`. The description carries the meaning.
 
-1. **Use one lowercase word.** Letters and digits only, no hyphen: `defect`, `impact`, `tdd`. The validator enforces this.
+1. **Use one lowercase word.** Letters and digits only, no hyphen: `defect`, `impact`, `probe`. The validator enforces this.
 2. **Name what the skill hands back or does.**
    - It produces an artifact: use the artifact's noun, such as `defect`, `story`, or `pr`. Do not add a verb such as `create-`, `draft-`, or `to-`.
-   - It runs a practice: use the term a QA engineer or developer says out loud, such as `tdd`, `impact`, or `scenario`.
+   - It runs a practice: use the term a QA engineer or developer says out loud, such as `impact`, `probe`, or `scenario`.
    - Use a nickname such as `copigot` only when the plain word is taken or too generic. The description must then say what the skill does.
 3. **Prefer a standard term to an invented one.** Use an abbreviation only when people in the field know it, such as `tdd`, `pr`, or `qa`, or when it mirrors a command the maintainer already types: `gcm` follows `gc -m`.
 4. **Never take a reserved name.** [`scripts/reserved_skill_names.txt`](scripts/reserved_skill_names.txt) lists runtime commands and bundled skills, such as `bug`, `recap`, `review`, and `init`. The runtime runs its own command first, so a skill with a reserved name is never reached by its trigger. The validator enforces this. Refresh the list when a runtime adds commands.
-5. **Reuse a name from another skill set only for the same job.** Users may install poteto's pstack or mattpocock/skills next to this repo. `tdd` and `pr` match their jobs there. Never give one of their names to a different job.
+5. **Reuse a name from another skill set only for the same job.** Users may install poteto's pstack or mattpocock/skills next to this repo. `pr` matches its job there. Never give one of their names to a different job.
 6. **Keep the category folder out of the name.** `testing/` and `dev/` group skills. They are not part of the handle.
 7. **Keep author and brand names out**, except in a future router or setup skill for this repo.
 8. **Treat a rename as a breaking change.** Rename only for a collision or a misleading name. In the same commit, update the README catalog and symlink commands, the tests, and every "invoke `name`" reference.

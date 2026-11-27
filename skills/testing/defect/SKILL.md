@@ -56,5 +56,3 @@ Continue only with a confirmed product defect. Flaky / selector / test-data / st
 10. **QA Note** — a `> **QA Note:**` block (no emoji) covering regression scenarios, edge cases, and related components.
 
 Before presenting, apply [Tone Contract](REFERENCE.md#tone-contract) and complete its [Quality Checklist](REFERENCE.md#quality-checklist).
-
-After presenting the ticket, offer to lock the confirmed defect in a regression test; if the user accepts, invoke `tdd` with the ticket.
